@@ -1,0 +1,24 @@
+Dasd Zertifikat herunzerladen mit dem Browser und dann mittels untenstehenden Befehls in den keystore packen von Java.
+
+keytool -import -file /Users/thomas/Desktop/keycloak.crt -alias keycloak -keystore /Library/Java/JavaVirtualMachines/jdk1.8.0_151.jdk/Contents/Home/jre/lib/security/cacerts
+
+
+Das Zertifikat für keycloak bauen.
+keytool -genkey -alias localhost -keyalg RSA -keystore keycloak.jks -validity 10950
+
+
+Folgendes anpassen:
+<security-realm name="UndertowRealm">
+    <server-identities>
+        <ssl>
+            <keystore path="keycloak.jks" relative-to="jboss.server.config.dir" keystore-password="secret" />
+        </ssl>
+    </server-identities>
+</security-realm>
+
+<subsystem xmlns="urn:jboss:domain:undertow:3.0">
+   <buffer-cache name="default"/>
+   <server name="default-server">
+      <https-listener name="https" socket-binding="https" security-realm="UndertowRealm"/>
+   ...
+</subsystem>

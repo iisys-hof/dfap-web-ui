@@ -1,0 +1,304 @@
+
+<!--
+  ~ Copyright 2018 Thomas Winkler
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<ng-template #wrongEntry let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Falscher Wert</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Einer der eingegeben Werte ist nicht korrekt</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Schließen</button>
+  </div>
+</ng-template>
+<button id="modalWrongEntry" style="display: none;" (click)="openModal(wrongEntry)">x</button>
+
+<ng-template #wrongTime let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Falsche Angabe</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Einer der angegeben Werte ist nicht korrekt. Bitte korrigieren.</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Schließen</button>
+  </div>
+</ng-template>
+<button id="modalWrongTime" style="display: none;" (click)="openModal(wrongTime)">x</button>
+
+<ng-template #finishOrderTemplate let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Auftrag abschließen</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Soll der Auftrag jetzt abgeschlossen werden? Er kann dannach nicht mehr aufgerufen werden.</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="d('Close click')">Abbrechen</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('finish-order')">Abschließen</button>
+  </div>
+</ng-template>
+
+<ng-template #finishOrderOkTemplate let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Auftrag abgeschlossen</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Auftrag erfolgreich abgeschlossen.
+      <i  style="font-size: 2rem" class="fa text-success fa-check"></i>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Back-to-orders')">Zur Auftragsübersicht</button>
+  </div>
+</ng-template>
+<button id="finishOrderOkButton" style="display: none;" (click)="openModal(finishOrderOkTemplate)">x</button>
+
+
+
+<div class="row">
+  <div class="col-3">
+    <div class="card" >
+      <h4 class="card-header">Steuerung</h4>
+      <div style="padding-top: 8px" class="card-body" id="control-card">
+        <label class="text-muted" style="display:block; font-size: 0.8rem" for="shiftbtng">Schicht</label>
+        <div  id="shiftbtng" class="btn-group" role="group" aria-label="Basic example">
+          <button id="shift1" (click)="changeShift(1)" type="button" [ngClass]="{'active': shift === 1}" class="btn btn-outline-primary">1</button>
+          <button id="shift2" (click)="changeShift(2)" type="button" [ngClass]="{'active': shift === 2}" class="btn btn-outline-primary">2</button>
+          <button id="shift3" (click)="changeShift(3)" type="button" [ngClass]="{'active': shift === 3}" class="btn btn-outline-primary">3</button>
+          <button id="shift4" (click)="changeShift(4)" type="button" [ngClass]="{'active': shift === 4}" class="btn btn-outline-primary">4</button>
+          <button id="shift5" (click)="changeShift(5)" type="button" [ngClass]="{'active': shift === 5}" class="btn btn-outline-primary">5</button>
+          <button id="shift6" (click)="changeShift(6)" type="button" [ngClass]="{'active': shift === 6}" class="btn btn-outline-primary">6</button>
+          <button id="shift8" (click)="changeShift(8)" type="button" [ngClass]="{'active': shift === 8}" class="btn btn-outline-primary">8</button>
+        </div>
+
+
+        <hr>
+        <div>
+          <span id="actual-time " class="monospace" style="font-size:1.8em; margin-top: -6px; float: right;">{{now | date:'H:mm'}}</span>
+          <span class="text-muted" style="font-size: 0.8rem">Uhrzeit</span>
+        </div>
+        <div style="margin-top: 14px">
+          <span id="process-time" class="monospace" style="font-size:1.3em; margin-top: 0px; float: right;">{{processDuration | date:'H:mm:ss'}}</span>
+          <!--<span (click)="resetDuration()" class="text-muted" style="font-size: 0.8rem;  margin-top: 0.2em;">Dauer <i class="fa fa-repeat"></i> <br ></span>-->
+          <span  class="text-muted" style="font-size: 0.8rem;  margin-top: 0.2em;">Dauer <br ></span>
+        </div>
+
+
+        <hr *ngIf="lastEndTime !== null && feedbackEntries?.length === 0" style="margin-right: -20px; margin-left: -20px" >
+        <!--<div *ngIf="processStartTime !== null" style="margin-top: -10px; line-height: 1rem;">
+          <span class="text-muted" style="font-size: 0.8rem">Letzter Vorgangsstart<br></span>
+          <span class="monospace" >{{processStartTime | date:'H:mm'}} Uhr</span>
+
+        </div>-->
+        <div *ngIf="lastEndTime !== null && feedbackEntries?.length === 0" style="margin-top: 10px; line-height: 1rem;">
+          <span class="text-muted" style="font-size: 0.8rem;  margin-top: 0.2em;">Ende des letzen Auftrags<br ></span>
+          <span id="process-time" class="monospace" >{{lastEndTime | date:'dd.MM'}} {{lastEndTime | date:'H:mm'}} Uhr </span>
+        </div>
+        <hr style="margin-right: -20px; margin-left: -20px" >
+        <div style="width: 100%;" class="btn-group-vertical" id="state-buttons">
+          <button type="button" [ngClass]="{'btn-outline-primary': activeState != 1, 'btn-primary active ': activeState === 1}" id="prepare" class="btn btn-block btn-lg" (click)="prepare()">Aufrüsten</button>
+          <button type="button" [ngClass]="{'btn-outline-primary': activeState != 2, 'btn-primary active': activeState === 2}" id="start-up" class="btn btn-block btn-lg" (click)="startup()">Anfahren</button>
+          <button type="button" [ngClass]="{'btn-outline-primary': activeState != 3, 'btn-primary active': activeState === 3}" id="extrusion" class="btn btn-outline-primary btn-block btn-lg" (click)="extrusion()">Extrusion</button>
+          <button type="button" [ngClass]="{'btn-outline-primary': activeState != 4, 'btn-primary active': activeState === 4}" id="variant-change" class="btn btn-outline-primary btn-block btn-lg" (click)="variantChange()">Variantenwechsel</button>
+          <button type="button" [ngClass]="{'btn-outline-primary': activeState != 5, 'btn-primary active': activeState === 5}" id="shutdown" class="btn btn-outline-primary btn-block btn-lg" (click)="shutdown()">Abrüstung</button>
+
+        </div>
+        <button type="button" id="print" class="btn btn-outline-secondary btn-block btn-lg " [ngClass]="{'alert-danger': noPrinter}" (click)="printSetting()"><span *ngIf="!noPrinter">Drucken</span><span *ngIf="noPrinter">Kein Drucker der Maschine zugewiesen</span></button>
+        <button hidden type="button" id="machine-error" class="btn btn-outline-danger btn-block btn-lg" (click)="machineError()">Störung</button>
+        <button type="button" id="order-finish" class="btn btn-outline-success btn-block btn-lg" (click)="openModal(finishOrderTemplate)">Auftrag beenden</button>
+      </div>
+      <div class="card-footer text-muted">
+      </div>
+    </div>
+  </div>
+
+
+  <div  class="col-9 " >
+    <div class="row" >
+      <div class="col-12 fb-nothing" >
+        <div class="alert alert-success save-alert text-center"  [ngClass]="{'alert-hide': saveState === 0, 'alert-show': saveState === 1}"  role="alert">
+          <strong>Erfolg – </strong> Daten wurden erfolgreich gespeichert
+        </div>
+        <div class="card" >
+          <h4 class="card-header">Werte
+          <button (click)="showPackaging()" class="btn btn-outline-primary" style="margin-top: -7px;margin-bottom: -14px;float: right;color: white;">Zur Verpackungsvorschrift</button>
+          </h4>
+          <div  class="card-body">
+            <div style="font-size: 0.8rem;" class="row text-muted">
+              <div class="col-5">
+               <strong>Startzeit und Startdatum</strong>
+              </div>
+              <div class="col-5">
+                <strong>Endzeit und Enddatum</strong>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-5">
+                <input id="startTimeField" class="form-control" [ngModel]="startTimeField | date:'HH:mm'"      (ngModelChange)="startTimeField= changeTime($event)" type="time" name="startDate" [disabled]="!startTimeEditable"/>
+                <input id="startDateField" class="form-control" [ngModel]="startDateField | date:'yyyy-MM-dd'" (ngModelChange)="startDateField = changeDate($event)" type="date" name="startDate" [disabled]="!startTimeEditable"/>
+              </div>
+              <div class="col-5">
+                <input id="endTimeField" class="form-control" [ngModel]="endTimeField | date:'HH:mm'"      (ngModelChange)="endTimeField = changeTime($event)" type="time" name="startDate" [disabled]="!endTimeEditable" (click)="endDateEdited = true"/>
+                <input id="endDateField" class="form-control" [ngModel]="endDateField | date:'yyyy-MM-dd'" (ngModelChange)="endDateField = changeDate($event)" type="date" name="startDate" [disabled]="!endTimeEditable" (click)="endDateEdited = true"/>
+
+              </div>
+
+              <div class="col-2 text-right">
+                <div class="text-muted minutes" > {{ calculateMinutes()| number:'1.0-0'}} <br />Minuten</div>
+                <button *ngIf="editRow === -1" type="button" class="btn btn-outline-primary" (click)="addEntry()"><i class="fa fa-plus"> </i></button>
+                <button *ngIf="editRow  != -1" style="padding: 6px 2px;" type="button" class="btn btn-outline-primary" (click)="addEntry()"><small>Ändern</small></button>
+              </div>
+            </div>
+
+          <!--Aufrüsten -- -->
+          <!--Anfahren-->
+            <div *ngIf="activeState === 2" >
+              <div style="font-size: 0.8rem; margin-top: 10px" class="row text-muted">
+                <div class="col-6">
+                  <strong>Ausschuss</strong>
+                </div>
+                <div class="col-4">
+                  <strong>kg/m und Geschwindigkeit</strong>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <input id="valueDevectiveField" type="number"  step="any" class="form-control  " placeholder="Ausschuss" [(ngModel)]="valueDevectiveField" [ngClass]="{'missing-input': valueDevectiveField < 0 || null === valueDevectiveField && isCheck}">
+                </div>
+                <div class="col-4">
+                  <input id="weightField" type="number" step="0.001" class="form-control  "  placeholder="kg/m" [(ngModel)]="weightField" [ngClass]="{'missing-input': weightField < 0 || null === weightField && isCheck}">
+                  <input id="speedField" type="number" step="any" class="form-control  " placeholder="v m/min" [(ngModel)]="speedField" [ngClass]="{'missing-input': speedField < 0 || null === speedField && isCheck}">
+                </div>
+              </div>
+            </div>
+
+            <!--Extrusion-->
+            <div *ngIf="activeState === 3" class="fb-good-defective">
+              <div style="font-size: 0.8rem; margin-top: 10px" class="row text-muted">
+                <div class="col-6">
+                  <strong>Gutware und Ausschuss</strong>
+                </div>
+                <div class="col-4">
+                  <strong>kg/m und Geschwindigkeit</strong>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <input id="valueOKField" type="number" step="any" class="form-control "  placeholder="Gutware"  [(ngModel)]="valueOKField" [ngClass]="{'missing-input': valueOKField < 0 || null === valueOKField && isCheck}" name="x">
+                  <input id="valueDevectiveField" type="number"  step="any" class="form-control  " placeholder="Ausschuss" [(ngModel)]="valueDevectiveField" [ngClass]="{'missing-input': valueDevectiveField < 0 || null === valueDevectiveField && isCheck}">
+                </div>
+                <div class="col-4">
+                  <input id="weightField" type="number" step="any" class="form-control  "  placeholder="kg/m" [(ngModel)]="weightField" [ngClass]="{'missing-input': weightField < 0 || null === weightField && isCheck}">
+                  <input id="speedField" type="number" step="any" class="form-control  " placeholder="v m/min" [(ngModel)]="speedField" [ngClass]="{'missing-input': speedField < 0 || null === speedField && isCheck}">
+                </div>
+              </div>
+            </div>
+            <!--Variantenwechsel-->
+            <div *ngIf="activeState === 4">
+              <div style="font-size: 0.8rem; margin-top: 10px" class="row text-muted">
+                <div class="col-6">
+                  <strong>Ausschuss</strong>
+                </div>
+                <div class="col-4">
+                  <strong>kg/m und Geschwindigkeit</strong>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <input id="valueDevectiveField" type="number" step="any" class="form-control  " placeholder="Ausschuss" [(ngModel)]="valueDevectiveField" [ngClass]="{'missing-input': valueDevectiveField < 0 || null === valueDevectiveField && isCheck}">
+                </div>
+                <div class="col-4">
+                  <input id="weightField" type="number" step="any" class="form-control  "  placeholder="kg/m" [(ngModel)]="weightField" [ngClass]="{'missing-input': weightField < 0 || null === weightField && isCheck}">
+                  <input id="speedField" type="number" step="any" class="form-control  " placeholder="v m/min" [(ngModel)]="speedField" [ngClass]="{'missing-input': speedField < 0 || null === speedField && isCheck}">
+                </div>
+              </div>
+            </div>
+            <!--Abrüsten -- -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 30px">
+      <div class="col-12" >
+        <div class="card" >
+
+          <div class="card-body">
+            <table class="tg">
+              <tr>
+                <th class="table-heading-2nd" rowspan="2">Vorgang</th>
+                <th class="table-heading-2nd" rowspan="2">Startzeit<br>hh:mm</th>
+                <th class="table-heading-2nd" rowspan="2">Endzeit<br>hh:mm</th>
+                <th class="table-heading-1st" colspan="3">Menge (m)</th>
+                <th class="table-heading-2nd" rowspan="2">Gewicht<br>(kg/m)</th>
+                <th class="table-heading-2nd" rowspan="2">v<br>(m/min)</th>
+              </tr>
+              <tr>
+                <td class="table-heading-2nd" >Gutware</td>
+                <td class="table-heading-2nd" >Gesamt</td>
+                <td class="table-heading-2nd" >Ausschuss</td>
+              </tr>
+              <tr *ngIf="feedbackEntries.length == 0 ">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+
+              <tr *ngFor="let entry of feedbackEntries; let i = index" (click)="editTableRow(i)" [ngClass]="{'edit': editRow === i}">
+                <td><span>{{stateName[entry.subProcess.subProcessId - 1 ]}}</span></td>
+                <td><span>{{entry.startTime | date:'dd.MM.y'}}<br>
+                          {{entry.startTime | date:' H:mm'}}
+                </span></td>
+                <td><span>{{entry.endTime | date:'dd.MM.y'}}<br>
+                          {{entry.endTime | date:' H:mm'}}
+                </span></td>
+                <td><span>{{entry.accepted }}</span></td>
+                <td><span>{{calculateAll(i) | number:'1.0-1'}}</span></td>
+                <td><span>{{entry.rejected}}</span></td>
+                <td><span>{{entry.weight}}</span></td>
+                <td><span>{{entry.speed}}</span></td>
+              </tr>
+
+            </table>
+          </div>
+          <div class="card-footer text-muted">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

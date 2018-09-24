@@ -1,0 +1,103 @@
+/*!
+ * Copyright 2018 Thomas Winkler
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.machine-item {
+  padding: 5px;
+  text-align: center;
+  display: inline-block;
+  width: 120px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+  border: 1px solid rgba(0, 74, 144, 0.3);
+  margin-right: -5px;
+  z-index: 10;
+}
+
+.printer-item {
+  padding: 5px;
+  text-align: center;
+  display: inline-block;
+  width: 200px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+  border: 1px solid rgba(0, 74, 144, 0.3);
+
+}
+
+.machine-printer-item {
+  padding: 5px;
+  text-align: center;
+  display: inline-block;
+  min-width: 60px;
+  white-space: nowrap;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+  border: 1px solid rgba(0, 74, 144, 0.3);
+  margin-left: -5px;
+  z-index: 10;
+  &.small {
+    align-content: center;
+    line-height: 10px;
+    padding: 0px 5px;
+  }
+}
+
+.machine-printer-plug {
+  width: 30px;
+  height: 30px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  z-index: 9;
+  margin-bottom: -10px;
+}
+.machine-printer-un-pluged {
+   background: url('../../../../assets/img/printer-un-pluged.svg');
+ }
+
+.machine-printer-pluged {
+  background: url('../../../../assets/img/printer-pluged.svg');
+}
+
+.printer-remove-area {
+  border-width: 3px;
+  width: 150px;
+  height: 150px;
+  float: right;
+  text-align: center;
+  padding: 15px;
+  padding-top: 40px;
+  line-height: 13px;
+  font-weight: bolder;
+}
+.alert.drag-over {
+  background-color: #d85973 !important;
+}
+.drag-over {
+  background-color: #71e274 !important;
+}
+.drag-hint-border {
+  border-color: #4dcb50;
+  background-color: #dcf5e2;
+}
+.alert.drag-hint-border {
+  border-color: #cb5966;
+  background-color: #f8d7da;
+}

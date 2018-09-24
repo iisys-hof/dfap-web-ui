@@ -1,0 +1,189 @@
+<!--
+  ~ Copyright 2018 Thomas Winkler
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div class="row">
+
+  <ng-template #createToolModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">Werkzeug anlegen</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Das Werkzeig mit den Daten:</p>
+      <label for="newTool">Werkzeug:</label>
+      <input [(ngModel)]="newTool.name" id="newTool" class="form-control" type="text">
+      <label for="newToolVariant">Variante:</label>
+      <input [(ngModel)]="newTool.variant" id="newToolVariant" class="form-control" type="text">
+
+      <p>jetzt anlegen?</p>
+    </div>
+    <div class="modal-footer">
+      <button [disabled]="newTool.variant === undefined || newTool.name === undefined ||  newTool?.variant.length === 0 || newTool?.name.length === 0" type="button" class="btn btn-outline-dark" (click)="c('Close click')">Speichern</button>
+      <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Abbrechen</button>
+    </div>
+  </ng-template>
+  <button  id="createToolModal" style="display: none;" (click)="openModal(createToolModal)">x</button>
+
+  <div class="col-4">
+    <div *ngIf="saved" class="alert alert-success save-alert text-center" role="alert">
+      <strong> Daten wurden erfolgreich gespeichert!</strong>
+    </div>
+    <div *ngIf="notSaved" class="alert alert-danger save-alert text-center" role="alert">
+      <strong>Daten wurden nicht gespeichert!</strong>
+      <hr>
+      {{notSavedText}}
+    </div>
+    <div class="card" >
+      <h4 class="card-header">Auswahl</h4>
+      <div class="card-body">
+
+        <ng-template #rt let-r="result" let-t="term">
+          {{r.name}}
+        </ng-template>
+
+
+        <div class="form mb-2">
+
+          <label for="typeahead-template">Schema über Werkzeug auswählen:</label>
+          <div class="input-group mb-3">
+            <input [disabled]="selectedTI != null || selectedTool != null" id="typeahead-template" type="text" class="form-control"
+
+                   [(ngModel)]="qaToolSearchModel"
+                   [ngbTypeahead]="search"
+                   [resultTemplate]="rt"
+                   [inputFormatter]="formatter"
+                   (keyup.enter)="selectTool(false)"/>
+            <div class="input-group-append">
+              <button [disabled]="selectedTI != null" (click)="qaToolSearchModel = undefined; selectedTool = undefined; testInstruction = undefined; selectedToolIsUnknown = false; toolsInTI = ''" class="btn btn-outline-secondary" type="button"><span aria-hidden="true"><strong>&times;</strong></span></button>
+            </div>
+          </div>
+          <div *ngIf="selectedToolIsUnknown" class="alert alert-info" role="alert">
+            <button type="button" class="close" (click)="selectedToolIsUnknown = false" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <p><strong>Werkzeug nicht in der Datenbank gefunden!</strong></p>
+            <!-- <hr>
+             <div style="width: 100%; height: 40px;">
+               <button (click)="openCreateToolDialog()" class="btn pull-right btn-outline-info">Werkzeug anlegen</button>
+             </div>-->
+          </div>
+          <button type="submit" [disabled]="qaToolSearchModel === undefined || selectedTool != undefined" class="btn btn-primary mb-2" (click)="selectTool(false)">Werkzeug übernehmen</button>
+        </div>
+
+        <hr>
+        <div class="form mb-2">
+
+          <label for="typeahead-template-schema">Schema auswählen oder neu erzeugen:</label>
+            <div class="pull-right">
+              <button [disabled]="selectedTool != null" (click)="previousTI()" type="button" class="btn btn-link"><i class="fa fa-angle-double-left"></i></button>
+              <button [disabled]="selectedTool != null" (click)="nextTI()" type="button" class="btn btn-link"><i class="fa fa-angle-double-right"></i></button>
+            </div>
+          <div class="input-group mb-3">
+            <input [disabled]="selectedTI != null || selectedTool != null" id="typeahead-template-schema" type="text" class="form-control"
+
+                   [(ngModel)]="qaTISearchModel"
+                   [ngbTypeahead]="searchTI"
+                   [resultTemplate]="rt"
+                   [inputFormatter]="formatter"
+                   (keyup.enter)="selectTI(false)"/>
+            <div class="input-group-append">
+              <button [disabled]="selectedTool != null"  (click)="qaTISearchModel = undefined; selectedTI = undefined; testInstruction = undefined; selectedTIIsUnknown = false; toolsInTI = ''" class="btn btn-outline-secondary" type="button"><span aria-hidden="true"><strong>&times;</strong></span></button>
+            </div>
+          </div>
+          <div *ngIf="selectedTIIsUnknown" class="alert alert-info" role="alert">
+            <button type="button" class="close" (click)="selectedTIIsUnknown = false" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <p><strong>Schema nicht in der Datenbank gefunden!</strong></p>
+             <hr>
+             <div style="width: 100%; height: 40px;">
+               <button (click)="createTI()" class="btn pull-right btn-outline-info">Schema anlegen</button>
+             </div>
+          </div>
+          <button type="submit" [disabled]="qaTISearchModel === undefined || selectedTI != undefined" class="btn btn-primary mb-2" (click)="selectTI(false)">Schema übernehmen</button>
+        </div>
+
+        <hr>
+        <div class="form-group">
+          <label for="tools-textarea">Werkzeuge (6-stellig) Beispiel: 809200, 809240</label>
+          <textarea cols="20" wrap="hard" id="tools-textarea"  [(ngModel)]="toolsInTI" class="form-control" rows="12"></textarea>
+        </div>
+
+        <button [disabled]="!(selectedTI != undefined || selectedTool != undefined)" class="btn pull-right btn-block btn-primary"  (click)="save()">Speichern</button>
+
+      </div>
+      <div class="card-footer text-muted">
+      </div>
+    </div>
+  </div>
+  <div class="col-8">
+    <div class="card" >
+      <h4 class="card-header">QS-Felder</h4>
+      <div class="card-body">
+        <div *ngIf="testInstruction === undefined" > -- Bitte Schema auswählen --</div>
+        <table *ngIf="testInstruction !== undefined" class="table">
+          <thead>
+          <tr>
+            <th scope="col">Feld</th>
+            <th scope="col">Aktiviert</th>
+            <th scope="col">i.O/n.i.O</th>
+            <th scope="col">Textfeld</th>
+            <th scope="col">Feldname</th>
+            <th scope="col">Beschreibung</th>
+          </tr>
+          </thead>
+          <tbody >
+          <tr *ngFor="let property of testInstruction?.testInstructionPropertyList">
+            <th scope="row">{{property.number}}</th>
+            <td>
+              <div class="form-check checkbox-slider-md checkbox-slider--b-flat checkbox-slider-info">
+                <label>
+                  <input type="checkbox" [checked]="property.active === 1" (change)="property.active = $event.target.checked ? 1: 0"><span></span>
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="form-check checkbox-slider-md checkbox-slider--b-flat">
+                <label>
+                  <input type="checkbox" [disabled]="property.active === 0" [checked]="property.type === 2 || property.type === 0" (change)="changeCheckboxValue($event, property, 0)"><span></span>
+                </label>
+              </div>
+            </td>
+            <td>
+              <div class="form-check checkbox-slider-md checkbox-slider--b-flat">
+                <label>
+                  <input type="checkbox" [disabled]="property.active === 0" [checked]="property.type === 2 || property.type === 1" (change)="changeCheckboxValue($event, property, 1)"><span></span>
+                </label>
+              </div>
+            </td>
+            <td>
+              <input [disabled]="property.active === 0" [(ngModel)]="property.name" class="form-control" type="text">
+            </td>
+            <td>
+              <input [disabled]="property.active === 0" [(ngModel)]="property.additionalInfo" class="form-control" type="text">
+            </td>
+          </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer text-muted">
+      </div>
+    </div>
+  </div>
+</div>

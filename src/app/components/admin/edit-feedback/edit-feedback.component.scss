@@ -1,0 +1,208 @@
+/*!
+ * Copyright 2018 Thomas Winkler
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+@import '../../../../assets/font/Inconsolata-Regular.ttf';
+@font-face {
+  font-family: 'Inconsolata';
+  src:url('../../../../assets/font/Inconsolata-Regular.ttf') format('woff2');
+
+  font-weight: normal;
+  font-style: normal;
+}
+#control-card {
+  &>button {
+    margin-top: 10px;
+    &:last-child {
+      margin-top: 30px;
+    }
+  }
+}
+
+.tg {
+  border-collapse:collapse;
+  border-spacing:0;
+  width: 100%;
+  line-height: 1;
+
+  tr:nth-child(2) {
+    font-weight:bold;
+  }
+
+  tr td,  tr th{
+    font-family:Arial, sans-serif;
+    font-size:14px;
+    border: 1px solid lightgray;
+    overflow:hidden;
+    word-break:normal;
+    height: 40px;
+
+    vertical-align:center;
+    text-align: center;
+
+  }
+  tr td {
+    cursor:pointer;
+  }
+  tr:last-child td{
+    font-weight: normal;
+  }
+  tr.edit {
+    transition: background 1s;
+    background: #e2e3e5;
+    color: #383d41;
+    td > span{
+      filter: blur(10px);
+    }
+    td:first-child {
+      &::before {
+        transition: content 0.5s;
+        position: absolute;
+        margin-top: -2px;
+        color: #383d41;
+        font-size: 1.2rem;
+
+        content: '\f00d Bearbeiten abbrechen';
+        font-family: FontAwesome;
+
+      }
+    }
+  }
+
+}
+
+
+.fb-all {
+
+  #valueOKField {
+    display: inline-block ;width: calc((100% - 100px) / 2);border-bottom-right-radius: 0px;border-top-right-radius:0px;
+  }
+
+  #valueDevectiveField {
+    display: inline-block; width: calc((100% - 100px) / 2); border-radius: 0px; border-left: none; margin-left: -4px;
+  }
+
+  #valueTypeField {
+    width: 100px; margin-right: 0px; margin-left:-1px; border-bottom-left-radius: 0px;border-top-left-radius:0px; border-left: none; float: right;
+  }
+
+  #weightField, #endTimeField, #startTimeField  {
+    border-bottom-right-radius: 0px;border-top-right-radius:0px; display: inline; width: calc(100% / 2 - 2px);
+  }
+
+  #speedField, #endDateField, #startDateField {
+    border-bottom-left-radius: 0px; border-top-left-radius:0px; border-left: none; margin-left: -4px; display: inline; width: calc(100% / 2 - 2px);
+  }
+}
+
+.fb-good-defective {
+  #valueOKField, #weightField, #endTimeField, #startTimeField {
+    border-bottom-right-radius: 0px;border-top-right-radius:0px; display: inline; width: calc(100% / 2 - 2px);
+  }
+
+  #valueDevectiveField, #speedField, #endDateField, #startDateField {
+    border-bottom-left-radius: 0px; border-top-left-radius:0px; border-left: none; margin-left: -4px; display: inline; width: calc(100% / 2 - 2px);
+  }
+}
+
+.fb-devective {
+
+  #valueTypeField {
+    width: 100px; margin-right: 0px; margin-left:-1px; border-bottom-left-radius: 0px;border-top-left-radius:0px; border-left: none; float: right;
+  }
+
+  #weightField, #endTimeField, #startTimeField {
+    border-bottom-right-radius: 0px;border-top-right-radius:0px; display: inline; width: calc(100% / 2 - 2px);
+  }
+
+  #speedField, #endDateField, #startDateField {
+    border-bottom-left-radius: 0px; border-top-left-radius:0px; border-left: none; margin-left: -4px; display: inline; width: calc(100% / 2 - 2px);
+  }
+}
+
+.fb-nothing {
+
+  #weightField, #endTimeField, #startTimeField {
+    border-bottom-right-radius: 0px;border-top-right-radius:0px; display: inline; width: calc(100% / 2 - 2px);
+  }
+
+  #speedField, #endDateField, #startDateField {
+    border-bottom-left-radius: 0px; border-top-left-radius:0px; border-left: none; margin-left: -4px; display: inline; width: calc(100% / 2 - 2px);
+  }
+}
+
+.missing-input, .is-invalid {
+  background: #fccfcf;
+}
+
+.small-field {
+  font-size: 0.9rem !important;
+}
+
+button.active {
+  background-color: #0091d0 !important;
+  border-color: #004a90 !important;
+}
+.btn-group > .btn {
+  width: 27px;
+
+  padding: 0;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+button {
+  &.active {
+    background-color: #0062cc !important;;
+  };
+}
+
+
+.monospace {
+  //font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: 'Inconsolata', monospace;
+}
+#state-buttons {
+  button {
+    padding: 6px !important;
+  }
+}
+.table-heading-1st {
+  background: #e2eaee;
+}
+.table-heading-2nd {
+  background: #f0f0f0;
+}
+
+
+.minutes {
+  display: inline-block;
+  position: absolute;
+  text-align: left;
+  font-size: 0.8rem;
+  line-height: 13px;
+  //margin-left: 10px;
+  //margin-top: 5px;
+  top: 7px;
+  right: 69px;
+}
+
+.invisible {
+  visibility: hidden;
+}
+.input-waiting {
+  width: calc( 100% - 60px);
+}

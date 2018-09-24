@@ -1,0 +1,102 @@
+<!--
+  ~ Copyright 2018 Thomas Winkler
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <h4 class="card-header">Druckerübersicht</h4>
+      <div class="card-body">
+        <table class="table table-sm">
+          <thead>
+          <tr>
+            <th scope="col">Druckername</th>
+            <th scope="col">Status-LED</th>
+            <th scope="col">Status</th>
+            <th scope="col">Tintenstand</th>
+            <th scope="col">Solventstand</th>
+            <th scope="col">Druckanzahl</th>
+            <!--<th scope="col">Drucklabel</th>-->
+            <th scope="col">Aktualisiert</th>
+            <th scope="col" ></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let p of printers">
+            <th scope="row">{{p?.name}}</th>
+            <th >{{p?.printerStatus?.ledState || 'n/a'}}</th>
+            <td>{{p?.printerStatus?.state || 'n/a'}}</td>
+            <td>{{p?.printerStatus?.liquidLevel?.inkLevel || 'n/a'}}</td>
+            <td>{{p?.printerStatus?.liquidLevel?.makeUpLevel || 'n/a'}}</td>
+            <td>{{p?.printerStatus?.prints || 'n/a'}}</td>
+            <!--<td>Datum Uhrzeit Ma.-Nr. 605504 RAL 7016 - GEALAN . STV . M . I . B . KOMO 9484 . PCT9001 . on032 . Made in Germany</td>-->
+            <td *ngIf="p?.printerStatus?.time !== null">{{p?.printerStatus?.time | date: 'dd.MM.yyyy'}} {{p?.printerStatus?.time | date: 'HH:mm:ss'}} Uhr</td>
+            <td *ngIf="p?.printerStatus?.time === null">-</td>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--
+  <div class="col-sm-3">
+    <div class="panel panel-default" droppable (onDrop)="onMPDrop($event)">
+      <div class="panel-heading">Drop Items here</div>
+      <div class="panel-body">
+        <li *ngFor="let item of droppedItems" class="list-group-item">{{item.name}}</li>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-3">
+    <div class="panel panel-default" droppable (onDrop)="onMPDrop($event)">
+      <div class="panel-heading">Drop Items here</div>
+      <div class="panel-body">
+        <li *ngFor="let item of droppedItems2" class="list-group-item">{{item.name}}</li>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-3">
+    <ul class="list-group">
+      <li draggable *ngFor="let item of items" [dragData]="item" class="list-group-item">{{item.name}}</li>
+    </ul>
+  </div>
+
+  <div class="col-sm-3">
+    <div class="panel panel-default" droppable (onDrop)="onMPDrop($event)">
+      <div class="panel-heading">Drop Items here</div>
+      <div class="panel-body">
+        <li *ngFor="let item of droppedItems" class="list-group-item">{{item.name}}</li>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-3">
+    <div class="panel panel-default" droppable (onDrop)="onMPDrop($event)">
+      <div class="panel-heading">Drop Items here</div>
+      <div class="panel-body">
+        <li *ngFor="let item of droppedItems2" class="list-group-item">{{item.name}}</li>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+-->

@@ -1,0 +1,143 @@
+<!--
+  ~ Copyright 2018 Thomas Winkler
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div class="row">
+  <div class="col-6">
+    <div class="card" >
+      <h4 class="card-header">Rückmeldungen</h4>
+      <div class="card-body">
+        <form style="margin-top: 28px;" class="form-inline">
+          <div class="form-group">
+            <div class="input-group">
+              <strong style="margin-top: -28px;position: absolute;z-index: 999;">Startdatum</strong>
+              <input [disabled]="showOnlyOneOrder" class="form-control" placeholder="yyyy-mm-dd" name="dp1" [(ngModel)]="qaOrderStartDatemodel" type="date" ngbDatepicker #d01="ngbDatepicker">
+              <div class="input-group-append">
+                <button [disabled]="showOnlyOneOrder" class="btn btn-outline-secondary" (click)="d01.toggle()" type="button">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </div>
+            </div>
+            <div  style="margin-left: 20px;" class="input-group">
+              <strong style="margin-top: -28px;position: absolute;z-index: 999;">Enddatum</strong>
+              <input [disabled]="showOnlyOneOrder"class="form-control" placeholder="yyyy-mm-dd" name="dp2" [(ngModel)]="qaOrderEndDatemodel" type="date" ngbDatepicker #d02="ngbDatepicker">
+              <div class="input-group-append">
+                <button [disabled]="showOnlyOneOrder" class="btn btn-outline-secondary" (click)="d02.toggle()" type="button">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <hr>
+        <div  class="form-check checkbox-slider-md checkbox-slider--b-flat">
+          <label>
+            <input [(ngModel)]="showOnlyFinishedOrders" [checked]="showOnlyFinishedOrders" (change)="showOnlyOrdersForMachine = false; showOnlyOneOrder = false" type="checkbox">
+            <span>Nur abgeschlossene Aufträge anzeigen?</span>
+          </label>
+        </div>
+        <hr>
+        <div  class="form-check checkbox-slider-md checkbox-slider--b-flat">
+          <label>
+            <input [(ngModel)]="showOnlyOrdersForMachine" [checked]="showOnlyOrdersForMachine" (change)="showOnlyFinishedOrders = false; showOnlyOneOrder = false" type="checkbox">
+            <span>Rückmeldungen nur für eine bestimmte Maschine anzeigen?</span>
+          </label>
+        </div>
+
+        <select *ngIf="showOnlyOrdersForMachine" [compareWith]="compareMachines"  class="form-control form-control-sm" id="machine" required style="width: 200px" [ngModel]="selectedMachine" (ngModelChange)="changeMachine($event)">
+          <option *ngFor="let machine of machines" [ngValue]="machine" [selected]="machine.machineId == selectedMachine.machineId">{{machine.name}}</option>
+        </select>
+
+        <hr>
+        <div class="form-check checkbox-slider-md checkbox-slider--b-flat">
+          <label>
+            <input [(ngModel)]="showOnlyOneOrder" [checked]="showOnlyOneOrder" (change)="showOnlyFinishedOrders = false; showOnlyOrdersForMachine = false" type="checkbox">
+            <span>Rückmeldungen nur für einen bestimmten Auftrag anzeigen?</span>
+          </label>
+        </div>
+
+
+        <ng-template #orderrt let-r="result" let-t="term">
+          {{r.orderingId}}
+        </ng-template>
+
+        <label  [hidden]="!showOnlyOneOrder" for="typeahead-template">Aufrag auswählen:</label>
+        <input [hidden]="!showOnlyOneOrder" id="typeahead-template" type="text" class="form-control" [(ngModel)]="qaOrderSearchModel" [ngbTypeahead]="orderSearch" [resultTemplate]="orderrt"
+               [inputFormatter]="orderFormatter" />
+
+        <p  [hidden]="!showOnlyOneOrder" *ngIf="qaOrderSearchModel?.orderingId">Ausgewählter Auftrag: <code>W{{qaOrderSearchModel?.orderingId}}</code></p>
+        <p  [hidden]="!showOnlyOneOrder" *ngIf="!qaOrderSearchModel?.orderingId">Kein Auftrag ausgewählt</p>
+
+        <hr>
+        <div  *ngIf="!((showOnlyOneOrder &&  qaOrderSearchModel?.orderingId) || (qaOrderStartDatemodel !== undefined && qaOrderEndDatemodel !== undefined && !showOnlyOneOrder))"  class="alert alert-info">
+          <strong>Rückmeldung erstellen</strong><br> Zum Erstellen der Rückmeldungsdatei bitte Zeitraum und bei Bedarf die Auftragsnummer angeben
+        </div>
+       <!-- <button [disabled]="!((qaOrderStartDatemodel !== undefined && qaOrderEndDatemodel !== undefined && qaOrderSearchModel?.orderingId) || (qaOrderStartDatemodel !== undefined && qaOrderEndDatemodel !== undefined && !showOnlyOneOrder))"  (click)="generateQAXLS()" class="btn btn-primary">Excel-Datei erstellen</button>-->
+        <button [disabled]="!((showOnlyOneOrder &&  qaOrderSearchModel?.orderingId) || (qaOrderStartDatemodel !== undefined && qaOrderEndDatemodel !== undefined && !showOnlyOneOrder))"  (click)="generateFBXLS()" class="btn btn-primary">Excel-Datei erstellen</button>
+
+      </div>
+      <div class="card-footer text-muted">
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="card" >
+      <h4 class="card-header">Qualitätssicherung</h4>
+      <div class="card-body">
+        <form style="margin-top: 62px;" class="form-inline">
+          <div class="form-group">
+            <div class="input-group">
+              <strong style="margin-top: -28px;position: absolute;z-index: 999;">Startdatum</strong>
+              <input class="form-control" placeholder="yyyy-mm-dd" name="dp1" [(ngModel)]="qaToolStartDatemodel" type="date" ngbDatepicker #d1="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="d1.toggle()" type="button">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </div>
+            </div>
+            <div  style="margin-left: 20px;" class="input-group">
+              <strong style="margin-top: -28px;position: absolute;z-index: 999;">Enddatum</strong>
+              <input class="form-control" placeholder="yyyy-mm-dd" name="dp2" [(ngModel)]="qaToolEndDatemodel" type="date" ngbDatepicker #d2="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+                  <i class="fa fa-calendar"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <hr>
+
+        <ng-template #toolrt let-r="result" let-t="term">
+          {{r.name}}  {{r.version}}
+        </ng-template>
+
+        <label for="typeahead-template-tool">Werkzeuggeometrie:</label>
+        <input id="typeahead-template-tool" type="text" class="form-control" [(ngModel)]="qaToolSearchModel" [ngbTypeahead]="toolSearch" [resultTemplate]="toolrt"
+               [inputFormatter]="toolFormatter" />
+        <hr>
+        <p *ngIf="!(qaToolStartDatemodel === undefined || qaToolEndDatemodel === undefined || qaToolSearchModel === undefined || qaToolSearchModel?.toolId == null)"> Erstelle Excel-Datei mit den Qualitätsdaten von <code>{{qaToolSearchModel?.name + " " +  qaToolSearchModel?.version}}</code> im Zeitraum von <code>{{qaToolStartDatemodel.day}}.{{qaToolStartDatemodel.month}}.{{qaToolStartDatemodel.year}}</code> bis <code>{{qaToolEndDatemodel.day}}.{{qaToolEndDatemodel.month}}.{{qaToolEndDatemodel.year}}</code></p>
+
+        <div *ngIf="qaToolStartDatemodel === undefined || qaToolEndDatemodel === undefined || qaToolSearchModel === undefined || qaToolSearchModel?.toolId == null" class="alert alert-info">
+          <strong>Excel erstellen</strong><br> Zum Erstellen der Excel-Datei bitte Zeitraum und Werkzeugnummer angeben
+        </div>
+        <button (click)="generateQAXLS()" *ngIf="qaToolStartDatemodel !== undefined && qaToolEndDatemodel !== undefined && qaToolSearchModel?.toolId !== undefined && qaToolSearchModel?.toolId != null" class="btn btn-primary">Excel-Datei erstellen</button>
+
+      </div>
+      <div class="card-footer text-muted">
+      </div>
+    </div>
+  </div>
+</div>

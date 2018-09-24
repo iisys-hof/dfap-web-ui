@@ -1,0 +1,183 @@
+<!--
+  ~ Copyright 2018 Thomas Winkler
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<app-additional-information-insertion></app-additional-information-insertion> <!-- Nur anzeigen, wenn noch keine Variante drinsteht-->
+
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">Artikel</th>
+              <th scope="col">Bezeichnung</th>
+              <th scope="col">Menge</th>
+              <th scope="col">Behälter</th>
+              <th scope="col">Anlage</th>
+              <th scope="col">Länge</th>
+              <th style="width: 125px;" scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">{{order?.article?.name}}</th>
+              <td>{{order?.article?.description}}</td>
+              <td>{{order?.totalQuantity}}</td>
+              <td>{{order?.quantityOfContainer}} {{order?.typeOfContainer}}</td>
+              <td>{{order?.machine.name}}</td>
+              <td>{{order?.lengthOfArticle}}</td>
+              <td *ngIf="order?.orderFinished !== 1">
+                <button class="btn btn-block  btn-sm btn-outline-primary" *ngIf="order?.orderingId != activeOrderId " (click)="startOrder(order)">Auftrag starten</button>
+                <button class="btn btn-block  btn-sm btn-primary" *ngIf="order?.orderingId === activeOrderId" (click)="startOrder(order)">Auftrag gestartet</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        {{order?.printDescription}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col col-7">
+    <div class="card">
+      <div class="card-body">
+        <table class="table table-sm">
+          <thead>
+          <tr>
+            <th scope="col">Komponente</th>
+            <th scope="col">Bezeichnung</th>
+            <th scope="col">Menge</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let part of order?.parts">
+            <th scope="row">{{part?.component}}</th>
+            <td>{{part?.description}}</td>
+            <td>{{part?.quantity}} {{part?.unit}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col col-5">
+    <div class="card">
+      <div class="card-body">
+        <table class="table table-sm">
+          <thead>
+          <tr>
+            <th scope="col">Bezeichnung</th>
+            <th scope="col">Ausprägung</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Profilkörper</th>
+              <td>{{order?.profileBody}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Dichtung</th>
+              <td>{{order?.profileGasket}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Anzahl Dichtungen</th>
+              <td>{{order?.profileGasketQuantity}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Werkzeug</th>
+              <td>{{order?.tool?.name}} {{order?.tool?.version}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Schutzfolie o.</th>
+              <td><span *ngFor="let s of getSchufo(order?.schufoO)">{{s | limitTo: 'dyn':3}}</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Schutzfolie u.</th>
+              <td><span *ngFor="let s of getSchufo(order?.schufoU)">{{s | limitTo: 'dyn':3}}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col col-7">
+    <div class="card">
+      <div class="card-body">
+        <table class="table table-sm table-bordered">
+          <tbody>
+          <tr>
+            <th scope="row">Kompletteinheiten</th>
+            <td>{{order?.quantityOfContainer}}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <th scope="row">+Mindermenge (MM)</th>
+            <td>{{order?.shortage}}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <th scope="row"></th>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <th scope="row">Lademitteltyp</th>
+            <td>{{order?.typeOfContainer}}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <th scope="row">Menge je Lademittel</th>
+            <td>{{order?.quantityPerContainer}} m</td>
+            <td>{{order?.piecesPerContainer}} St.</td>
+          </tr>
+          <tr>
+            <th scope="row">Bündelung</th>
+            <td>-</td>
+            <td></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col col-5">
+    <div class="card" style="margin-bottom: 15px;">
+        <button (click)="showPackaging()" class="btn btn-outline-primary">Zur Verpackungsvorschrift</button>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <p>Besonderheiten</p>
+        <p>-</p>
+      </div>
+    </div>
+  </div>
+</div>

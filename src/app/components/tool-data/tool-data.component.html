@@ -1,0 +1,83 @@
+
+<!--
+  ~ Copyright 2018 Thomas Winkler
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div [ngClass]="{'row': originName === 'orderdata' || originName === 'feedback'}">
+  <div [ngClass]="{'col-12': originName === 'orderdata' || originName === 'feedback'}">
+    <div  [ngClass]="{'card': originName === 'orderdata' || originName === 'feedback'}">
+      <div  [ngClass]="{'card-body': originName === 'orderdata' || originName === 'feedback'}">
+        <button *ngIf="originName === 'orderdata' || originName === 'feedback'" style="margin-bottom: 10px;" class="btn btn-sm btn-outline-primary" routerLink="/{{originName}}"><i class="fa fa-arrow-left"></i> Zurück</button>
+        <div class="row">
+
+          <div class="col-3" [ngbCollapse]="fullscreen" >
+            <div class="card " id="file-card">
+              <h4 class="card-header" [ngClass]="{'disabled': fileNotFound}">Abschnitte </h4>
+              <div class="card-body" [ngClass]="{'disabled': fileNotFound}">
+                <div id="pdf-ref" [ngbCollapse]="file.mimeType != 'application/pdf'">
+                  <p *ngIf="!isPackingView" class="text-muted" [ngbCollapse]="outlines?.length > 0">Keine Links vorhanden </p>
+                  <ul class="list-group" style="margin-top:50px;">
+                    <!--<li *ngFor="let pageRef of pageRefs | keys; let i = index" class="list-group-item"><a (click)="openNameDest(pageRef, i)">{{pageRef}}</a></li>-->
+                    <li *ngFor="let o of outlines; let i = index" [ngClass]="{'marked': outlineNumber === i}" class="list-group-item"><a (click)="openOutlineDest(o, i)">{{o.title}}</a></li>
+                    <li *ngIf="isPackingView" class="list-group-item"><a (click)="openPackageView(0)">Container</a></li>
+                    <li *ngIf="isPackingView" class="list-group-item"><a (click)="openPackageView(1)">Holzkiste</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="card-footer text-muted">
+              </div>
+            </div>
+          </div>
+
+          <div class="col-9" [ngClass]="{'col-9': !fullscreen, 'col-12': fullscreen}">
+            <div class="card" id="file-viewer-card">
+              <h4 class="card-header" [ngClass]="{'disabled': fileNotFound}">Inhalt
+                <span style="float: right;">
+          <i style="margin-top: 3px;" class="fa fa-chevron-circle-left " aria-hidden="true" (click)="previousOutline()" [ngClass]="{'text-muted': !pdfHasPreviousOutline}" *ngIf="file.mimeType === 'application/pdf' && outlines?.length > 0"></i>
+          <i style="margin-top: 3px; margin-left: 10px; margin-right: 20px"  class="fa fa-chevron-circle-right" aria-hidden="true" (click)="nextOutline()" [ngClass]="{'text-muted': !pdfHasNextOutline}" *ngIf="file.mimeType === 'application/pdf' && outlines?.length > 0"></i>
+
+          <i style="margin-top: 3px;" class="fa fa-chevron-circle-left " aria-hidden="true" (click)="previousPDFSite()" [ngClass]="{'text-muted': !pdfHasPreviousSite}" *ngIf="file.mimeType === 'application/pdf' && outlines?.length === 0"></i>
+          <i style="margin-top: 3px; margin-left: 10px; margin-right: 20px"  class="fa fa-chevron-circle-right" aria-hidden="true" (click)="nextPDFSite()" [ngClass]="{'text-muted': !pdfHasNextSite}" *ngIf="file.mimeType === 'application/pdf' && outlines?.length === 0"></i>
+
+          <i style="margin-top: 3px;" class="fa fa-expand" [ngClass]="{'fa-expand': !fullscreen, 'fa-compress': fullscreen}" aria-hidden="true" (click)="toggleFullscreen()"></i>
+        </span>
+              </h4>
+              <div id="file-viewer" class="card-body">
+                <div *ngIf="fileNotFound" style="margin: auto; margin-top: 10px; text-align: center; padding-top: 20px;" class="alert alert-danger">
+                  <p>Keine Datei gefunden.</p>
+                </div>
+                <div class="spinner" *ngIf="fileLoading">
+                  <div class="rect1"></div>
+                  <div class="rect2"></div>
+                  <div class="rect3"></div>
+                  <div class="rect4"></div>
+                  <div class="rect5"></div>
+                </div>
+                <object id="objectView" style="display: none;" [ngbCollapse]="file.mimeType != 'application/pdf'"></object>
+                <canvas id="canvas" [ngbCollapse]="file.mimeType != 'application/pdf' || fileLoading" style="border: 1px solid #f0f0f0"></canvas>
+                <img id="image" src="" style="max-width: 100%;" [ngbCollapse]="!(file.mimeType.indexOf('image/') >= 0)" alt="Viewer"/>
+                <div id="text" [ngbCollapse]="!(file.mimeType.indexOf('text/') >= 0)"></div>
+              </div>
+              <div class="card-footer text-muted">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

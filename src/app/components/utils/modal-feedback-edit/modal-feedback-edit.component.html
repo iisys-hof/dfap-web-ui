@@ -1,0 +1,110 @@
+<!--
+  ~ Copyright 2018 Thomas Winkler
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<ng-template #createFbModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Werkzeugnummer angeben</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div  class="card-body">
+    <div style="font-size: 0.8rem;" class="row text-muted">
+      <div class="col-6">
+        <strong>Startzeit und Startdatum</strong>
+      </div>
+      <div class="col-6">
+        <strong>Endzeit und Enddatum</strong>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <input id="startTimeField" [ngModel]="startTime | date:'HH:mm'"      (ngModelChange)="startTime2 = changeTime($event)" class="form-control"  type="time" name="startDate" />
+        <input id="startDateField" [ngModel]="startDate | date:'yyyy-MM-dd'" (ngModelChange)="startDate2 = changeDate($event)" class="form-control"  type="date" name="startDate" />
+      </div>
+      <div class="col-6">
+        <input id="endTimeField" [ngModel]="endTime | date:'HH:mm'"          (ngModelChange)="endTime2 = changeTime($event)" class="form-control" type="time" name="startDate" />
+        <input id="endDateField" [ngModel]="endDate | date:'yyyy-MM-dd'"     (ngModelChange)="endDate2 = changeDate($event)" class="form-control" type="date" name="startDate" />
+      </div>
+    </div>
+
+    <div style="font-size: 0.8rem; margin-top: 10px" class="row text-muted">
+      <div class="col-6">
+        <strong>Gutware und Ausschuss</strong>
+      </div>
+      <div class="col-6">
+        <strong>kg/m und Geschwindigkeit</strong>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <input id="valueOKField" type="number" step="any" class="form-control"  placeholder="Gutware"  [(ngModel)]="accepted" [ngClass]="{'missing-input': accepted < 0 || null === accepted && isCheck}" name="x">
+        <input id="valueDevectiveField" type="number"  step="any" class="form-control  " placeholder="Ausschuss" [(ngModel)]="rejected" [ngClass]="{'missing-input': rejected < 0 || null === rejected && isCheck}">
+      </div>
+      <div class="col-6">
+        <input id="weightField" type="number" step="any" class="form-control"  placeholder="kg/m"  [(ngModel)]="weight" [ngClass]="{'missing-input': weight < 0 || null === weight && isCheck}">
+        <input id="speedField" type="number" step="any" class="form-control " placeholder="v m/min" [(ngModel)]="speed" [ngClass]="{'missing-input': speed < 0 || null === speed && isCheck}">
+      </div>
+    </div>
+    <div style="font-size: 0.8rem; margin-top: 10px" class="row text-muted">
+      <div class="col-3">
+        <strong>Vorgang</strong>
+      </div>
+      <div class="col-3">
+        <strong>Personalnummer</strong>
+      </div>
+      <div class="col-6">
+        <strong>Schicht</strong>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">
+        <select [ngModel]="selectedState" (ngModelChange)="changeSubProcess($event)" class="form-control" id="subProcess" >
+          <option [ngValue]="states.prepare">Aufrüsten</option>
+          <option [ngValue]="states.startup">Anfahren</option>
+          <option [ngValue]="states.extrusion">Extrusion</option>
+          <option [ngValue]="states.variantChange">Variantenwechsel</option>
+          <option [ngValue]="states.shutdown">Abrüstung</option>
+        </select>
+      </div>
+      <div class="col-3">
+        <input type="number" step="any" class="form-control"  placeholder="0000"  [(ngModel)]="employeeNumber" [ngClass]="{'missing-input': employeeNumber < 0 || null === employeeNumber && isCheck}">
+
+      </div>
+      <div class="col-6">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button id="shift1" (click)="changeShift(1)" type="button" [ngClass]="{'active': shift === 1}" class="btn btn-outline-secondary">1</button>
+          <button id="shift2" (click)="changeShift(2)" type="button" [ngClass]="{'active': shift === 2}" class="btn btn-outline-secondary">2</button>
+          <button id="shift3" (click)="changeShift(3)" type="button" [ngClass]="{'active': shift === 3}" class="btn btn-outline-secondary">3</button>
+          <button id="shift4" (click)="changeShift(4)" type="button" [ngClass]="{'active': shift === 4}" class="btn btn-outline-secondary">4</button>
+          <button id="shift5" (click)="changeShift(5)" type="button" [ngClass]="{'active': shift === 5}" class="btn btn-outline-secondary">5</button>
+          <button id="shift6" (click)="changeShift(6)" type="button" [ngClass]="{'active': shift === 6}" class="btn btn-outline-secondary">6</button>
+          <button id="shift8" (click)="changeShift(8)" type="button" [ngClass]="{'active': shift === 8}" class="btn btn-outline-secondary">8</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="modal-footer ttte">
+    <button type="button" class="btn btn-outline-dark" (click)="save()">Speichern</button>
+    <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Abbrechen</button>
+    <button id="closeFbModal" style="display: none;" (click)="c('Save')">x</button>
+  </div>
+</ng-template>
+<button id="createFbModal" style="display: none;" (click)="openModal(createFbModal)">x</button>
+

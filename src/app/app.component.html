@@ -1,0 +1,138 @@
+<!--
+  ~ Copyright 2018 Thomas Winkler
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div *ngIf="activeView === '/login' && showHelp" (click)="showHelp = false" class="help" style=" background-image: url('assets/img/help/login.png');"></div>
+<div *ngIf="activeView === '/orders' && showHelp" (click)="showHelp = false" class="help" style=" background-image: url('assets/img/help/orderoverview.png');"></div>
+<div *ngIf="activeView === '/orderdata' && showHelp" (click)="showHelp = false" class="help" style=" background-image: url('assets/img/help/orderdetail.png');"></div>
+<div *ngIf="activeView === '/tooldata' && showHelp" (click)="showHelp = false" class="help" style=" background-image: url('assets/img/help/tooldata.png');"></div>
+<div *ngIf="activeView === '/toolsetting' && showHelp" (click)="showHelp = false" class="help" style=" background-image: url('assets/img/help/toolsettings.png');"></div>
+<div *ngIf="activeView === '/feedback' && showHelp" (click)="showHelp = false" class="help" style=" background-image: url('assets/img/help/feedback.png');"></div>
+<div *ngIf="activeView === '/qs' && showHelp" (click)="showHelp = false" class="help" style=" background-image: url('assets/img/help/qa.png');"></div>
+
+<div (click)="openNav()" id="menuToggle">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+
+
+<nav [ngClass]="{'menu-blur': menuOpen}" id="toolbar">
+  <div *ngIf="showAdditionalElements()" (click)="showHelp = !showHelp" [ngClass]="{'toolbar-active': showHelp}" class=" d-inline-block help-icon">
+    <div></div>
+  </div>
+  <div *ngIf="showAdditionalElements()" (click)="showCalculatorView =!showCalculatorView" [ngClass]="{'toolbar-active': showCalculatorView}" class=" d-inline-block calculator-icon">
+    <div></div>
+  </div>
+  <div *ngIf="showAdditionalElements()" (click)="showContainerView =!showContainerView" [ngClass]="{'toolbar-active': showContainerView}" class=" d-inline-block container-icon">
+    <div></div>
+  </div>
+  <div *ngIf="!showAdditionalElements()" routerLink="/admin/start" [ngClass]="{'toolbar-active': activeView === '/admin/start'}" class=" d-inline-block start-icon">
+    <div></div>
+  </div>
+
+
+
+  <div ngbDropdown placement="bottom-right" class="d-inline-block">
+    <button style="color: #fff;" class="btn btn-lg btn-link user-icon" id="dropdownBasic1" ngbDropdownToggle><i style="font-size: 1rem; text-decoration: none !important;">{{user['preferred_username']}} </i> <i class="fa fa-user"></i></button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+      <button class="dropdown-item" (click)="logout()">Abmelden</button>
+    </div>
+  </div>
+</nav>
+
+
+<nav id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" (click)="closeNav()">&times;</a>
+  <ul id="mySidenavMenu" class="menu">
+    <li style="margin-top: 30px; color: #2c314b;">Produktion</li>
+    <li (click)="closeNav()" class="nav-item"><a class="nav-link" [ngClass]="{'active': activeView === '/orders'}" routerLink="/orders">Alle Aufträge</a></li>
+    <li (click)="closeNav()" class="nav-item"><a class="nav-link" [ngClass]="{'active': activeView === '/orderdata'}" routerLink="/orderdata">Auftragdetails</a></li>
+    <li *ngIf="orderId !== -1" (click)="closeNav()" class="nav-item"><a class="nav-link" [ngClass]="{'active': activeView === '/tooldata'}" routerLink="/tooldata">WZ-Dokumente</a></li>
+    <li *ngIf="orderId !== -1" (click)="closeNav()" class="nav-item"><a class="nav-link" [ngClass]="{'active': activeView === '/toolsetting'}" routerLink="/toolsetting">WZ-Einstellungen</a></li>
+    <li *ngIf="orderId !== -1" (click)="closeNav()" class="nav-item"><a class="nav-link" [ngClass]="{'active': activeView === '/feedback'}" routerLink="/feedback">Rückmeldung</a></li>
+    <li *ngIf="orderId !== -1" (click)="closeNav()" class="nav-item"><a class="nav-link" [ngClass]="{'active': activeView === '/qs'}" routerLink="/qs">Qualitätssicherung</a></li>
+    <li *ngIf="orderId !== -1" (click)="closeNav()" class="nav-item"><a style="cursor: pointer; color: #007bff; margin-top: 36px;" class="nav-link" (click)="showPackaging() ">Verpackungsvorschrift</a></li>
+    <li *ngIf="orderId !== -1" (click)="closeNav()" class="nav-item"><a style="cursor: pointer; color: #007bff" class="nav-link" (click)="showCalculatorView =!showCalculatorView">Taschenrechner</a></li>
+    <li *ngIf="orderId !== -1" (click)="closeNav()" class="nav-item"><a style="cursor: pointer; color: #007bff" class="nav-link" (click)="showContainerView =!showContainerView">Containerübersicht</a></li>
+    <!--<li *ngIf="orderId !== -1" (click)="closeNav()" class="nav-item"><a class="nav-link" [ngClass]="{'active': activeView === '/preparation'}" routerLink="/preparation">Dateibrowser</a></li>-->
+
+    <li *ngIf="orderId === -1" class="nav-item text-muted"><a class="nav-link" style="color: #bcbfd7; border-top: 1px solid #afb4d2;" >WZ-Dokumente</a></li>
+    <li *ngIf="orderId === -1" class="nav-item text-muted"><a class="nav-link" style="color: #bcbfd7;">WZ-Einstellungen</a></li>
+    <li *ngIf="orderId === -1" class="nav-item text-muted"><a class="nav-link" style="color: #bcbfd7;">Rückmeldung</a></li>
+    <li *ngIf="orderId === -1" class="nav-item text-muted"><a class="nav-link" style="color: #bcbfd7;">Qualitätssicherung</a></li>
+    <li *ngIf="orderId === -1" class="nav-item text-muted"><a class="nav-link" style="color: #bcbfd7; margin-top: 36px;">Verpackungsvorschrift</a></li>
+    <li *ngIf="orderId === -1" class="nav-item text-muted"><a class="nav-link" style="color: #bcbfd7;">Taschenrechner</a></li>
+    <li *ngIf="orderId === -1" class="nav-item text-muted"><a class="nav-link" style="color: #bcbfd7;">Containerübersicht</a></li>
+    <!--<li *ngIf="orderId === -1" class="nav-item text-muted"><a class="nav-link" style="color: #bcbfd7;">Dateibrowser</a></li>-->
+
+    <li *ngIf="user['groups']?.includes('/admin')" style="margin-top: 30px; color: #2c314b;">Administrator</li>
+    <li *ngIf="user['groups']?.includes('/admin')" (click)="closeNav()" class="nav-item"><a class="nav-link" [ngClass]="{'active': activeView === '/admin/xls'}" routerLink="/admin/xls">Excel Dokumente</a></li>
+    <li *ngIf="user['groups']?.includes('/admin')" (click)="closeNav()" class="nav-item"><a class="nav-link" [ngClass]="{'active': activeView === '/admin/ef'}" routerLink="/admin/ef">Rückmeldung bearbeiten</a></li>
+    <li *ngIf="user['groups']?.includes('/admin')" (click)="closeNav()" class="nav-item"><a class="nav-link" [ngClass]="{'active': activeView === '/admin/printers'}" routerLink="/admin/printers">Druckerübersicht</a></li>
+    <li *ngIf="user['groups']?.includes('/admin')" (click)="closeNav()" class="nav-item"><a class="nav-link" [ngClass]="{'active': activeView === '/admin/mp'}" routerLink="/admin/mp">Druckerzuweisung</a></li>
+    <li *ngIf="user['groups']?.includes('/admin')" (click)="closeNav()" class="nav-item"><a class="nav-link" [ngClass]="{'active': activeView === '/admin/qa'}" routerLink="/admin/qa">QS-Eingabe</a></li>
+  </ul>
+</nav>
+
+
+<!--<nav role="navigation" [style.visibility]="loginState ? 'visible' : 'hidden'">-->
+
+<div *ngIf="showAdditionalElements()" class="site-info" [style.visibility]="loginState ? 'visible' : 'hidden'">
+  <div style="top: 4px;" [style.visibility]="orderId != -1 ? 'visible' : 'hidden'">
+    <span><strong>Auftrag:</strong> {{orderId}}</span>
+    <span><strong>Artikel:</strong> {{article}}</span>
+    <span><strong>Anlage:</strong> {{machine}}</span>
+  </div>
+  <div style="top: 23px;" [style.visibility]="orderId != -1 ? 'visible' : 'hidden'">
+      <span><strong>Menge:</strong> {{finishedQuantity | number:'1.0-1'}} / {{totalQuantity}} Meter</span>
+    <span><strong>Container:</strong> {{containerNumberFinished}} / {{containers?.length}}</span>
+  </div>
+</div>
+<div  [ngClass]="{'menu-blur': menuOpen}" (click)="closeNav()">
+ <router-outlet></router-outlet>
+</div>
+
+
+<div *ngIf="showContainerView" class="container-view">
+  <div style="margin: 10px; margin-bottom: 0px; margin-right: 12px;" class="form-inline pull-right">
+    <div class="form-group">
+      <label style="margin-right: 10px" for="container-input">Überschuss</label>
+      <input [(ngModel)]="containerValue" value="containerValue" type="number" class="form-control form-control-sm" style="width: 140px" id="container-input" (change)="updateContainerValue()">
+    </div>
+  </div>
+  <div class="grid-container" >
+    <div *ngFor="let c of containers;index as i" [ngClass]="{'grid-item-empty': !c.checked, 'grid-item-full': c.checked}" (click)="toggleContainers(c)"></div>
+  </div>
+</div>
+
+<app-calculator *ngIf="showCalculatorView"></app-calculator>
+
+<div *ngIf="activeView !== '/orders' && showAdditionalElements() && orderId !== -1 " (click)="viewBack()" style="background: white; opacity:0.8; width: 50px; height: 50px; position:fixed; z-index: 9999; bottom: 0px; left: 0px; border: 1px solid grey; border-top-right-radius: 5px">
+  <h1 style="margin-left: 10px; margin-top:-2px"><i class="fa fa-angle-double-left"></i></h1>
+</div>
+<div *ngIf="activeView !== '/qs' && showAdditionalElements() && orderId !== -1" (click)="viewForward()" style="background: white; opacity:0.8; width: 50px; height: 50px; position:fixed; z-index: 9999; bottom: 0px; right: 0px; border: 1px solid grey; border-top-left-radius: 5px">
+  <h1 style="margin-left: 13px; margin-top:-2px"><i class="fa fa-angle-double-right"></i></h1>
+</div>
+
+<li class="nav-dots" *ngIf="showAdditionalElements()">
+  <div [ngClass]="{'active': activeView === '/orders'}"for="img-1" class="nav-dot" id="img-dot-1"></div>
+  <div [ngClass]="{'active': activeView === '/orderdata'}"for="img-2" class="nav-dot" id="img-dot-2"></div>
+  <div [ngClass]="{'active': activeView === '/tooldata'}"for="img-3" class="nav-dot" id="img-dot-3"></div>
+  <div [ngClass]="{'active': activeView === '/toolsetting'}"for="img-4" class="nav-dot" id="img-dot-4"></div>
+  <div [ngClass]="{'active': activeView === '/feedback'}"for="img-5" class="nav-dot" id="img-dot-5"></div>
+  <div [ngClass]="{'active': activeView === '/qs'}"for="img-6" class="nav-dot" id="img-dot-6"></div>
+</li>

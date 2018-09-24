@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 60 60" style="enable-background:new 0 0 60 60;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFBF5D;}
+	.st1{fill:none;stroke:#193651;stroke-width:2;stroke-miterlimit:10;}
+	.st2{fill:#FFFFFF;}
+	.st3{fill:#27A2DE;}
+	.st4{fill:#193651;}
+</style>
+<rect x="2" y="50.9" class="st0" width="56" height="8.1"/>
+<g>
+	<line class="st1" x1="20.3" y1="0" x2="20.3" y2="50"/>
+</g>
+<g>
+	<line class="st1" x1="30" y1="0" x2="30" y2="50"/>
+</g>
+<g>
+	<line class="st1" x1="10.7" y1="0" x2="10.7" y2="50"/>
+</g>
+<g>
+	<line class="st1" x1="39.6" y1="0" x2="39.6" y2="50"/>
+</g>
+<g>
+	<line class="st1" x1="49.3" y1="0" x2="49.3" y2="50"/>
+</g>
+<line class="st1" x1="1.1" y1="50.6" x2="59" y2="50.6"/>
+<rect x="1" y="1.6" class="st0" width="57.9" height="5.8"/>
+<g>
+	<rect x="25.5" y="30.8" class="st2" width="27.7" height="10.5"/>
+	<rect x="29" y="32.9" class="st3" width="1.9" height="2"/>
+	<rect x="32.9" y="32.9" class="st3" width="1.9" height="2"/>
+	<rect x="36.7" y="32.9" class="st3" width="1.9" height="2"/>
+	<rect x="40.6" y="32.9" class="st3" width="1.9" height="2"/>
+	<rect x="44.5" y="32.9" class="st3" width="1.9" height="2"/>
+	<rect x="48.3" y="32.9" class="st3" width="1.9" height="2"/>
+	<rect x="29" y="36.9" class="st3" width="1.9" height="2"/>
+	<rect x="32.9" y="36.9" class="st3" width="1.9" height="2"/>
+	<rect x="36.7" y="36.9" class="st3" width="1.9" height="2"/>
+	<rect x="40.6" y="36.9" class="st3" width="1.9" height="2"/>
+	<rect x="44.5" y="36.9" class="st3" width="1.9" height="2"/>
+	<rect x="48.3" y="36.9" class="st3" width="1.9" height="2"/>
+</g>
+<g>
+	<rect x="6.1" y="16.6" transform="matrix(0.954 -0.2999 0.2999 0.954 -5.6463 7.0052)" class="st2" width="27.7" height="10.5"/>
+	<rect x="9.5" y="21.6" transform="matrix(0.954 -0.2999 0.2999 0.954 -6.3093 4.1716)" class="st3" width="1.9" height="2"/>
+	<rect x="13.2" y="20.5" transform="matrix(0.954 -0.2999 0.2999 0.954 -5.7916 5.2246)" class="st3" width="1.9" height="2"/>
+	<rect x="16.8" y="19.3" transform="matrix(0.954 -0.2999 0.2999 0.954 -5.2739 6.2776)" class="st3" width="1.9" height="2"/>
+	<rect x="20.5" y="18.2" transform="matrix(0.954 -0.2999 0.2999 0.954 -4.7562 7.3306)" class="st3" width="1.9" height="2"/>
+	<rect x="24.2" y="17" transform="matrix(0.954 -0.2999 0.2999 0.954 -4.2385 8.3835)" class="st3" width="1.9" height="2"/>
+	<rect x="27.9" y="15.8" transform="matrix(0.954 -0.2999 0.2999 0.954 -3.7208 9.4365)" class="st3" width="1.9" height="2"/>
+	<rect x="10.7" y="25.5" transform="matrix(0.954 -0.2999 0.2999 0.954 -7.3986 4.7072)" class="st3" width="1.9" height="2"/>
+	<rect x="14.4" y="24.3" transform="matrix(0.954 -0.2999 0.2999 0.954 -6.8809 5.7602)" class="st3" width="1.9" height="2"/>
+	<rect x="18" y="23.1" transform="matrix(0.954 -0.2999 0.2999 0.954 -6.3632 6.8131)" class="st3" width="1.9" height="2"/>
+	<rect x="21.7" y="22" transform="matrix(0.954 -0.2999 0.2999 0.954 -5.8455 7.8661)" class="st3" width="1.9" height="2"/>
+	<rect x="25.4" y="20.8" transform="matrix(0.954 -0.2999 0.2999 0.954 -5.3278 8.9191)" class="st3" width="1.9" height="2"/>
+	<rect x="29.1" y="19.7" transform="matrix(0.954 -0.2999 0.2999 0.954 -4.8101 9.972)" class="st3" width="1.9" height="2"/>
+</g>
+<g>
+	<path class="st4" d="M58,2v56H2V2H58 M60,0H0v60h60V0L60,0z"/>
+</g>
+<line class="st1" x1="0.1" y1="7.4" x2="58" y2="7.4"/>
+</svg>

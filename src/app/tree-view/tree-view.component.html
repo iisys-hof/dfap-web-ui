@@ -1,0 +1,28 @@
+<!--
+  ~ Copyright 2018 Thomas Winkler
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<ul *ngIf="treeData.length > 0" class="list-group tree">
+  <li *ngFor="let node of treeData | orderByPipe" class="list-group-item open"  >
+    <span (click)="node.isCollapsed = !node.isCollapsed">
+      <i *ngIf="!node.isCollapsed" class="fa fa-chevron-right" aria-hidden="true"></i>
+      <i *ngIf="node.isCollapsed" class="fa fa-chevron-down" aria-hidden="true"></i>
+    </span>
+    <span (click)="folderClicked(node)">
+      {{node.title}}
+    </span>
+    <app-tree-view (onFolderClicked)="folderClicked($event)" [ngbCollapse]="!node.isCollapsed" [treeData]="node.folder"></app-tree-view>
+  </li>
+</ul>

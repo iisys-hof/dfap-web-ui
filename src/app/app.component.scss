@@ -1,0 +1,297 @@
+/*!
+ * Copyright 2018 Thomas Winkler
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+a.nav-link.active {
+  background: #c5c9d8;
+  color: #00458a;
+}
+
+
+$container-width: 60px;
+$container-height: 60px;
+
+.container-view {
+  width: 404px;
+  height: auto;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  overflow-y: auto;
+  max-height: 480px;
+  position: absolute;
+  top: 60px;
+  right: 15px;
+  z-index: 9999;
+  -webkit-box-shadow: 0px 27px 29px -14px rgba(0,0,0,0.29);
+  -moz-box-shadow: 0px 27px 29px -14px rgba(0,0,0,0.29);
+  box-shadow: 0px 27px 29px -14px rgba(0,0,0,0.29);
+}
+.grid-container {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  padding: 10px;
+  grid-gap: 20px;
+}
+
+.grid-item-empty {
+  /*background: url('../assets/img/container1.svg');*/
+  background: url('../assets/img/container_C.svg');
+  width: $container-width;
+  height: $container-height;
+  background-repeat: no-repeat;
+}
+.grid-item-full {
+  /*background: url('../assets/img/container1OK.svg');*/
+  background: url('../assets/img/containerOK_C.svg');
+  width: $container-width;
+  height: $container-height;
+}
+
+.arrow_box {
+
+}
+
+.container-icon {
+  margin: 0 -6px;
+  border-left: 1px solid rgba(255,255,255,0.3);
+  border-right: 1px solid rgba(255,255,255,0.3);
+  div {
+    margin-left: 14px;
+    margin-right: 14px;
+    margin-top: 10px;
+    background: url('../assets/img/container5.svg');
+    background-size: contain;
+
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 40px;
+  }
+}
+.calculator-icon {
+  border-left: 1px solid rgba(255,255,255,0.3);
+  margin: 0 1px;
+    div {
+    margin-left: 14px;
+    margin-right: 14px;
+    margin-top: 10px;
+    background: url('../assets/img/calculator.svg');
+      background-size: contain;
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 40px;
+  }
+}
+
+.help-icon {
+  margin: 0 -6px;
+  border-left: 1px solid rgba(255,255,255,0.3);
+  div {
+    margin-left: 14px;
+    margin-right: 14px;
+    margin-top: 10px;
+    background: url('../assets/img/help.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 40px;
+  }
+}
+.start-icon {
+  border-left: 1px solid rgba(255,255,255,0.3);
+  border-right: 1px solid rgba(255,255,255,0.3);
+  div {
+    margin-left: 14px;
+    margin-right: 14px;
+    margin-top: 10px;
+    background: url('../assets/img/dashboard.svg');
+    background-size: contain;
+
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 40px;
+  }
+}
+
+
+.container-icon + div, .start-icon + div {
+  #dropdownBasic1 {
+    margin-top: -40px;
+  }
+}
+
+.user-icon {
+
+}
+.toolbar-active {
+  background-color: #afb4d2;
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 100%);
+  height: 49px;
+}
+
+
+.nav-dots {
+  width: 100%;
+  bottom: 21px;
+  height: 11px;
+  display: block;
+  position: fixed;
+  text-align: center;
+  margin-left: -17px;
+}
+
+.nav-dots .nav-dot {
+  top: -5px;
+  width: 9px;
+  height: 9px;
+  margin: 0 4px;
+  position: relative;
+  border-radius: 100%;
+  display: inline-block;
+  background-color: rgba(22, 22, 22, 0.6);
+}
+
+.nav-dots .nav-dot.active  {
+  cursor: pointer;
+  background-color: rgba(22, 22, 22, 0.8);
+  width: 13px;
+  height: 13px;
+  margin: 0 2px;
+  top: -3px;
+}
+
+
+#menuToggle {
+  position: fixed;
+  top: 14px;
+  right: 0;
+  left: 10px;
+  z-index: 1060;
+  width: 60px;
+  cursor: pointer;
+  span {
+    display: block;
+    width: 33px;
+    height: 4px;
+    margin-bottom: 5px;
+    position: relative;
+
+    background: #fff;
+    border-radius: 3px;
+
+    z-index: 1;
+
+    transform-origin: 4px 0px;
+
+    transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+    background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
+    opacity 0.55s ease;
+  }
+}
+
+
+nav#toolbar {
+    z-index: 99999;
+    position: fixed;
+    top:0;
+    right: 0;
+
+}
+
+
+/* The side navigation menu */
+.sidenav {
+  -webkit-box-shadow: 0px 0px 92px -29px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 92px -29px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 92px -29px rgba(0,0,0,0.75);
+
+
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 99999; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #ebf0ff; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.menu {
+  list-style-type: none;
+  margin-left: -20px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+/* The navigation menu links */
+.sidenav .menu{
+  position: absolute;
+  top: 60px;
+  left: 0px;
+  transition: 30ms;
+}
+#mySidenavMenu {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  color: #007bff;
+  display: block;
+  transition: 0.4s;
+  margin-left: -20px;
+  padding-left: 40px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid gainsboro;
+  white-space: nowrap;
+  width: 285px;
+
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  color: #0056b3;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+  width:auto;
+  border-bottom: none;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left .5s;
+  padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 700px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 1rem;}
+}

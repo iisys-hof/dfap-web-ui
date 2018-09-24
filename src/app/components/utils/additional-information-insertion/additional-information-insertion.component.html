@@ -1,0 +1,64 @@
+<!--
+  ~ Copyright 2018 Thomas Winkler
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<ng-template #createToolModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Werkzeugnummer angeben</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <div class="form mb-2">
+
+      <label *ngIf="!versionsLoading" for="typeahead-template">Werkzeug-Nummer:</label>
+      <label *ngIf="versionsLoading" for="typeahead-template">Werkzeug-Nummern werden geladen...</label>
+      <div style="display: inline-flex;" [ngClass]="{'input-waiting': versionsLoading}" class="input-group mb-3">
+        <input [disabled]="selectedVersion!= null" id="typeahead-template" type="text" class="form-control"
+
+               [(ngModel)]="qaVersionSearchModel"
+               [ngbTypeahead]="search"/>
+        <div class="input-group-append">
+          <button (click)="qaVersionSearchModel = undefined; selectedVersion = undefined; selectedVersionIsUnknown = false " class="btn btn-outline-secondary" type="button"><span aria-hidden="true"><strong>&times;</strong></span></button>
+        </div>
+      </div>
+      <div *ngIf="versionsLoading" style="margin: 0; display: inline-block; height: 20px;" class="spinner" >
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
+      <button type="submit" [disabled]="qaVersionSearchModel === undefined || selectedVersion != undefined" class="btn btn-primary mb-2" (click)="selectVersion()">Nummer übernehmen</button>
+    </div>
+
+    <div *ngIf="selectedVersionIsUnknown" class="alert alert-info" role="alert">
+      <button type="button" class="close" (click)="selectedVersionIsUnknown = false" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <p>Werkzeugnummer <strong>{{this.selectedVersion}}</strong> noch nicht im System. Sie wird angelegt.</p>
+    </div>
+
+    <hr>
+
+  </div>
+  <div class="modal-footer">
+    <button [disabled]="this.selectedVersion === undefined" type="button" class="btn btn-outline-dark" (click)="c('Save')">Speichern</button>
+    <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Abbrechen</button>
+  </div>
+</ng-template>
+<button id="createToolModal" style="display: none;" (click)="openModal(createToolModal)">x</button>

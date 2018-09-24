@@ -1,0 +1,110 @@
+<!--
+  ~ Copyright 2018 Thomas Winkler
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div class="row">
+  <div class="col-9" [ngClass]="{'col-9': !fullscreen, 'col-12': fullscreen}">
+    <div class="card" [ngClass]="{'disabled': fileNotFound}" id="file-viewer-card">
+      <h4 class="card-header" [ngClass]="{'disabled': fileNotFound}">Prüfanweisung
+        <!--<button style="margin: -10px 0 -7px 20px;" class="btn btn-primary" type="button" (click)="save()"><i class="fa fa-save"></i> Speichern</button>
+        <i style="margin-top: 3px; margin-left: 10px; margin-right: 20px" class="fa fa-chevron-circle-right pull-right" aria-hidden="true" (click)="nextOutline()" [ngClass]="{'text-muted': !pdfHasNextOutline}" *ngIf="outlines?.length !== 0"></i>
+        <i style="margin-top: 3px;" class="fa fa-chevron-circle-left pull-right" aria-hidden="true" (click)="previousOutline()" [ngClass]="{'text-muted': !pdfHasPreviousOutline}" *ngIf="outlines?.length !== 0"></i>
+
+        <i style="margin-top: 3px; margin-left: 10px; margin-right: 20px" class="fa fa-chevron-circle-right pull-right" aria-hidden="true" (click)="nextPDFSite()" [ngClass]="{'text-muted': !pdfHasNextSite} " *ngIf="outlines?.length === 0"></i>
+        <i style="margin-top: 3px;" class="fa fa-chevron-circle-left pull-right" aria-hidden="true" (click)="previousPDFSite()" [ngClass]="{'text-muted': !pdfHasPreviousSite}" *ngIf="outlines?.length === 0"></i>-->
+        <button (click)="changePage(1)" style="background: white; color: #004a90; margin-left: 5px; margin-bottom: -7px; margin-top: -3px" class="pull-right btn btn-sm btn-primary">Seite 2</button>
+        <button (click)="changePage(0)" style="background: white; border-color: #004a90; color: #004a90; margin-bottom: -7px; margin-top: -3px" class="pull-right btn btn-sm btn-primary">Seite 1</button>
+
+      </h4>
+
+
+      <div id="file-viewer" class="card-body">
+        <div *ngIf="fileNotFound" style="margin: auto; margin-top: 25px; text-align: center; padding-top: 10px;" class="alert alert-danger">
+          <p>Keine Werkzeugbegleitmappe gefunden.</p>
+        </div>
+        <div class="spinner" *ngIf="fileLoading">
+          <div class="rect1"></div>
+          <div class="rect2"></div>
+          <div class="rect3"></div>
+          <div class="rect4"></div>
+          <div class="rect5"></div>
+        </div>
+        <object id="objectView" style="display: none;" [ngbCollapse]="file.mimeType != 'application/pdf'"></object>
+        <canvas id="canvas" [ngbCollapse]="file.mimeType != 'application/pdf' || fileLoading" style="border: 1px solid #f0f0f0"></canvas>
+        <img id="image" src="" style="max-width: 100%;" [ngbCollapse]="!(file.mimeType.indexOf('image/') >= 0)" alt="Viewer"/>
+        <div id="text" [ngbCollapse]="!(file.mimeType.indexOf('text/') >= 0)"></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="alert alert-success save-alert text-center"  [ngClass]="{'alert-hide': saveState === 0, 'alert-show': saveState === 1}"  role="alert">
+      <strong>Daten gespeichert</strong>
+    </div>
+    <div class="alert alert-danger save-alert text-center"  [ngClass]="{'alert-hide': saveState === 0, 'alert-show': saveState === 2}"  role="alert">
+      <strong>Fehler beim Speichern!</strong>
+    </div>
+    <div class="card" id="qa-values">
+      <h4 class="card-header">Eingaben
+        <span >
+          <i *ngIf="qaInstruction !== null" style="margin-top: 3px;" class="fa fa-plus pull-right" (click)="addEntry()"></i>
+        </span>
+        <i style="margin-top: 3px; margin-left: 10px; margin-right: 20px" class="fa fa-chevron-circle-right pull-right" (click)="forward()" [ngClass]="{'text-muted': !(page < qaEntries.length - 1)}"></i>
+        <i style="margin-top: 3px;" class="fa fa-chevron-circle-left pull-right" (click)="prev()" [ngClass]="{'text-muted': !(page > 0)}"></i>
+
+      </h4>
+      <div style="text-align: right" class="card-footer text-muted">
+        <span style="text-align: right"><small> Eintrag {{page + 1}} von {{qaEntries.length}}</small><br /></span>
+        <span style="text-align: right" *ngIf="qaEntries[page]?.date"> <small style="font-weight: bolder">{{qaEntries[page]?.date | date: 'HH:mm'}} Uhr, {{qaEntries[page]?.date | date: 'dd.MM.yyyy'}}</small></span>
+
+      </div>
+      <div class="card-body">
+        <div *ngIf="qaInstruction === null" class="alert alert-info text-center" role="alert">
+          <p>Es gibt noch keine Einstellungsparameter</p>
+        </div>
+        <div *ngIf="qaEntries?.length <= 0 && qaInstruction?.testInstructionPropertyList?.length > 0" class="alert alert-info text-center" role="alert">
+          <p>Es gibt noch keine Einträge</p>
+        </div>
+
+
+        <div style="white-space: nowrap" *ngFor="let value of qaEntries[page]?.testInstructionValueList; index as i">
+          <div *ngIf="findProperty(value['number']).active === 1" class="form-group">
+            <div *ngIf="findProperty(value['number']).type === 0" class="form-check checkbox-slider-md checkbox-slider--b-flat">
+              <label>
+                <input [disabled]="!isEditable(page)" type="checkbox" [checked]="value['checkValue'] === 1" (change)="changeV(value)"><span><strong>{{value['number']}}:{{findProperty(value['number']).name}}</strong> <!--{{value['name']}} --></span>
+              </label>
+            </div>
+            <div *ngIf="findProperty(value['number']).type === 1"  > <!--class="input-group mb-3"-->
+              <div><strong>{{value['number']}}:{{findProperty(value['number']).name}}</strong></div>
+              <!--<div class="input-group-prepend">
+                <span class="input-group-text" ><strong>{{value['number']}}:{{findProperty(value['number']).name}}</strong></span>
+              </div>-->
+              <input [disabled]="!isEditable(page)" [(ngModel)]="value['checkText']" (blur)="hiddenSave()" type="text" class="form-control" >
+            </div>
+
+            <div *ngIf="findProperty(value['number']).type === 2" class="form-check checkbox-slider-md checkbox-slider--b-flat">
+              <label>
+                <input [disabled]="!isEditable(page)" type="checkbox" [checked]="value['checkValue'] === 1" (change)="changeV(value)"><span><strong>{{value['number']}}:{{findProperty(value['number']).name}}</strong> <!--{{value['name']}} --></span>
+              </label>
+            </div>
+            <div *ngIf="findProperty(value['number']).type === 2"  class="input-group mb-3">
+              <input [disabled]="!isEditable(page)" [(ngModel)]="value['checkText']" (blur)="hiddenSave()" style="margin-top: -5px;" type="text" class="form-control" >
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

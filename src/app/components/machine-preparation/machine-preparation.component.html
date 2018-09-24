@@ -1,0 +1,96 @@
+
+<!--
+  ~ Copyright 2018 Thomas Winkler
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div class="row">
+  <div class="col-3" [ngbCollapse]="fullscreen">
+    <div class="card" id="fileTree">
+      <h4 class="card-header">Ordner</h4>
+      <div class="card-body">
+        <div class="spinner" *ngIf="foldersLoading">
+          <div class="rect1"></div>
+          <div class="rect2"></div>
+          <div class="rect3"></div>
+          <div class="rect4"></div>
+          <div class="rect5"></div>
+        </div>
+        <app-tree-view (onFolderClicked)="folderClicked($event)" [treeData]="rootFolder.folder"></app-tree-view>
+      </div>
+      <div class="card-footer text-muted">
+      </div>
+    </div>
+  </div>
+
+  <div class="col-3" [ngbCollapse]="fullscreen" >
+    <div class="card " id="file-card">
+      <h4 class="card-header">{{selectedFolder.title ? selectedFolder.title : "-"}} </h4>
+      <div class="card-body">
+        <ul class="list-group files">
+          <li *ngFor="let file of selectedFolder.document | orderByPipe" class="list-group-item" (click)="fileClicked(file)">
+            <i class="fa fa-file-o" aria-hidden="true" *ngIf="!(file.mimeType === 'application/pdf' ||
+                                                              file.mimeType === 'text/plain' ||
+                                                              file.mimeType === 'image/png' ||
+                                                              file.mimeType === 'image/jpg')"></i>
+            <i class="fa fa-file-pdf-o" aria-hidden="true" *ngIf="file.mimeType === 'application/pdf'"></i>
+            <i class="fa fa-file-text-o" aria-hidden="true" *ngIf="file.mimeType === 'text/plain'"></i>
+            <i class="fa fa-file-image-o" aria-hidden="true" *ngIf="file.mimeType === 'image/png' || file.mimeType === 'image/jpg'"></i>
+            {{file.title}}
+          </li>
+        </ul>
+
+        <div id="pdf-ref" [ngbCollapse]="file.mimeType != 'application/pdf'">
+          <hr/>
+          <h5>Abschnitt</h5>
+          <p class="text-muted" [ngbCollapse]="outlines?.length > 0">Keine Links vorhanden </p>
+          <ul class="list-group" style="margin-top:50px;">
+            <!--<li *ngFor="let pageRef of pageRefs | keys; let i = index" class="list-group-item"><a (click)="openNameDest(pageRef, i)">{{pageRef}}</a></li>-->
+            <li *ngFor="let o of outlines; let i = index" [ngClass]="{'marked': outlineNumber === i}" class="list-group-item"><a (click)="openOutlineDest(o, i)">{{o.title}}</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card-footer text-muted">
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6" [ngClass]="{'col-6': !fullscreen, 'col-12': fullscreen}">
+    <div class="card" id="file-viewer-card">
+      <h4 class="card-header">Inhalt
+        <span style="float: right;">
+          <i style="margin-top: 3px;" class="fa fa-chevron-circle-left " aria-hidden="true" (click)="previousOutline()" [ngClass]="{'text-muted': !pdfHasPreviousOutline}" *ngIf="file.mimeType === 'application/pdf'"></i>
+          <i style="margin-top: 3px; margin-left: 10px; margin-right: 20px"  class="fa fa-chevron-circle-right" aria-hidden="true" (click)="nextOutline()" [ngClass]="{'text-muted': !pdfHasNextOutline}" *ngIf="file.mimeType === 'application/pdf'"></i>
+          <i style="margin-top: 3px;" class="fa fa-expand" [ngClass]="{'fa-expand': !fullscreen, 'fa-compress': fullscreen}" aria-hidden="true" (click)="toggleFullscreen()"></i>
+        </span>
+      </h4>
+      <div id="file-viewer" class="card-body">
+        <div class="spinner" *ngIf="fileLoading">
+          <div class="rect1"></div>
+          <div class="rect2"></div>
+          <div class="rect3"></div>
+          <div class="rect4"></div>
+          <div class="rect5"></div>
+        </div>
+        <object id="objectView" style="display: none;" [ngbCollapse]="file.mimeType != 'application/pdf'"></object>
+        <canvas id="canvas" [ngbCollapse]="file.mimeType != 'application/pdf' || fileLoading" style="border: 1px solid #f0f0f0"></canvas>
+        <img id="image" src="" style="max-width: 100%;" [ngbCollapse]="!(file.mimeType.indexOf('image/') >= 0)" alt="Viewer"/>
+        <div id="text" [ngbCollapse]="!(file.mimeType.indexOf('text/') >= 0)"></div>
+      </div>
+        <div class="card-footer text-muted">
+      </div>
+    </div>
+  </div>
+</div>

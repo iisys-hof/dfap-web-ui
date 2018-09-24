@@ -1,0 +1,170 @@
+
+<!--
+  ~ Copyright 2018 Thomas Winkler
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<app-modal-feedback-edit (updateFeedback)="updateFeedback($event)" (storeFeedback)="storeFeedback($event)" ></app-modal-feedback-edit> <!-- Nur anzeigen, wenn noch keine Variante drinsteht-->
+<app-additional-information-insertion (reloadTool)="reloadTool()"></app-additional-information-insertion>
+
+<div class="row">
+  <div class="col-3">
+    <div class="card" >
+      <h4 class="card-header">Auftragssuche</h4>
+      <div class="card-body">
+        <ng-template #orderrt let-r="result" let-t="term">
+          {{r.orderingId}}
+        </ng-template>
+
+        <label *ngIf="!ordersLoading" for="typeahead-template">Aufrag auswählen:</label>
+        <label *ngIf="ordersLoading"  for="typeahead-template">Aufräge werden geladen...</label>
+        <br>
+
+        <div style="display: inline-flex;" [ngClass]="{'input-waiting': ordersLoading}" class="input-group mb-3">
+          <input [disabled]="orderLoaded"  id="typeahead-template" type="text" class="form-control" [(ngModel)]="qaOrderSearchModel" [ngbTypeahead]="orderSearch" [resultTemplate]="orderrt"
+                 [inputFormatter]="orderFormatter" />
+          <div class="input-group-append">
+            <button (click)="removeModel()" class="btn btn-outline-secondary" type="button"><span aria-hidden="true"><strong>&times;</strong></span></button>
+          </div>
+        </div>
+
+
+
+        <div *ngIf="ordersLoading" style="margin: 0; display: inline-block; height: 20px;" class="spinner" >
+          <div class="rect1"></div>
+          <div class="rect2"></div>
+          <div class="rect3"></div>
+          <div class="rect4"></div>
+          <div class="rect5"></div>
+        </div>
+        <div [ngClass]="{'invisible': ordersLoading}">
+          <p  *ngIf="qaOrderSearchModel?.orderingId" >Ausgewählter Auftrag: <code>W{{qaOrderSearchModel?.orderingId}}</code></p>
+          <p  *ngIf="!qaOrderSearchModel?.orderingId">Kein Auftrag ausgewählt</p>
+        </div>
+
+        <button [disabled]="!qaOrderSearchModel?.orderingId" class="btn btn-primary btn-block" (click)="loadOrder()">Auftrag laden</button>
+
+      </div>
+      <div class="card-footer text-muted">
+      </div>
+    </div>
+    <div *ngIf="orderLoaded" style="margin-top: 20px" class="card" >
+      <h4 class="card-header">Auftragsabschluss</h4>
+      <div class="card-body">
+
+        <p><strong>Auftrag: </strong><code>{{qaOrderSearchModel.orderingId}}</code></p>
+
+        <hr>
+        <div class="form-check checkbox-slider-md checkbox-slider--b-flat">
+          <label>
+            <input [disabled]="!qaOrderSearchModel?.orderingId" type="checkbox" [checked]="orderFinished" (change)="changeFinishOrder()">
+            <span>
+              <strong *ngIf="orderFinished">Auftrag abgeschlossen</strong>
+              <strong *ngIf="!orderFinished">Auftrag offen</strong>
+            </span>
+          </label>
+        </div>
+
+
+      </div>
+      <div  class="card-footer text-muted">
+      </div>
+    </div>
+    <div *ngIf="orderLoaded" style="margin-top: 20px" class="card" >
+      <h4 class="card-header">Werkzeugnummer</h4>
+      <div class="card-body">
+
+        <p><strong>Werkzeug: </strong><code>{{tool?.name}}</code></p>
+        <p><strong>Version: </strong><code>{{tool?.version}}</code></p>
+        <button [disabled]="!qaOrderSearchModel?.orderingId" class="btn btn-primary btn-block" (click)="childAdd.openToolVersionModal(this.qaOrderSearchModel.orderingId, false)">Werkzeugnummer ändern</button>
+
+      </div>
+      <div  class="card-footer text-muted">
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="col-9" >
+    <div class="card" >
+      <h4 class="card-header">Rückmeldungen</h4>
+      <div class="card-body">
+        <table class="tg">
+          <tr>
+            <th class="table-heading-2nd" rowspan="2">Vorgang</th>
+            <th class="table-heading-2nd" rowspan="2">Startzeit<br>hh:mm</th>
+            <th class="table-heading-2nd" rowspan="2">Endzeit<br>hh:mm</th>
+            <th class="table-heading-1st" colspan="3">Menge (m)</th>
+            <th class="table-heading-2nd" rowspan="2">Gewicht<br>(kg/m)</th>
+            <th class="table-heading-2nd" rowspan="2">v<br>(m/min)</th>
+            <th class="table-heading-2nd" rowspan="2">Editieren</th>
+          </tr>
+          <tr>
+            <td class="table-heading-2nd" >Gutware</td>
+            <td class="table-heading-2nd" >Gesamt</td>
+            <td class="table-heading-2nd" >Ausschuss</td>
+          </tr>
+          <tr *ngIf="feedbackEntries.length == 0 ">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr *ngFor="let entry of feedbackEntries; let i = index">
+            <td><span>{{stateName[entry.subProcess.subProcessId - 1 ]}}</span></td>
+            <td><span>{{entry.startTime | date:'dd.MM.y'}}<br>
+                          {{entry.startTime | date:' H:mm'}}
+                </span>
+            </td>
+            <td><span>{{entry.endTime | date:'dd.MM.y'}}<br>
+                          {{entry.endTime | date:' H:mm'}}
+                </span>
+            </td>
+            <td><span>{{entry.accepted }}</span></td>
+            <td><span>{{calculateAll(i) | number:'1.0-1'}}</span></td>
+            <td><span>{{entry.rejected}}</span></td>
+            <td><span>{{entry.weight}}</span></td>
+            <td><span>{{entry.speed}}</span></td>
+            <td>
+              <button (click)="child.openFbDialog(entry)" class="btn btn-outline-primary btn-sm"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+              <button (click)="deleteFeedback(entry)" class="btn btn-outline-danger btn-sm"><i class="fa fa-minus" aria-hidden="true"></i></button>
+            </td>
+          </tr>
+        </table>
+        <button style="margin-top: 20px" (click)="child.openFbDialog(null)"  class=" pull-right btn btn-outline-success"><i class="fa fa-plus" aria-hidden="true"> Eintrag hinzufügen</i></button>
+        <div *ngIf="orderLoading" style="margin-top: 20px;">
+          <div style="margin: 0; display: inline-block; height: 20px;" class="spinner" >
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+          </div>
+          <div style="display: inline-block;">
+            Lade Rückmeldungen...
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-muted">
+      </div>
+    </div>
+  </div>
+</div>
+

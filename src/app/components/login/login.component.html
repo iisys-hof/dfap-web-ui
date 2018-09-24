@@ -1,0 +1,94 @@
+
+<!--
+  ~ Copyright 2018 Thomas Winkler
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div class="row justify-content-center " style="position: absolute; top: 0px; bottom: 0px; left:100px; right: 100px;" >
+  <div class=" align-self-center  blur" style="text-align: center">
+    <!--<h2 style="color: red">WARTUNGSMODUS</h2>-->
+    <div *ngIf="qrLogin == qrLoginEnum.QRAttempt" class="card" style="width: 400px;">
+      <div class="card-img-top">
+        <qr-scanner [debug]="false" [canvasWidth]="640" [canvasHeight]="480"  [mirror]="false" [stopAfterScan]="true" [updateTime]="500"  (onRead)="decodedOutput($event)"></qr-scanner>
+      </div>
+      <div class="card-body">
+       <h4 class="card-title">ID-Code scannen</h4>
+        <p class="card-text">Halten Sie Ihren Chip mit dem ID-Code vor die Kamera!</p>
+        <button style="padding: 0px;" (click)="qrLogin = qrLoginEnum.PWLogin" class="btn btn-sm btn-link">Mit Personalnummer anmelden</button>
+        <button style="padding: 0px;" (click)="qrLogin = qrLoginEnum.AdminLogin" class="btn btn-sm btn-link">Zum Administrationsbereich</button>
+
+        <hr>
+        <span class="text-muted"> Auf QR-Code warten<div class="loading-pulse"></div></span>
+      </div>
+    </div>
+    <br>
+
+    <div [style.display]="(qrLogin == qrLoginEnum.QRCorrect)  ? 'inherit' : 'none' " class="card" style="width: 400px;" >
+      <img [hidden]="!showImage" class="card-img-top" id="photo" alt="Card image cap" style=" -moz-transform: scaleX(-1); -o-transform: scaleX(-1); -webkit-transform: scaleX(-1); transform: scaleX(-1); filter: FlipH; -ms-filter: 'FlipH';">
+      <div class="card-body">
+        <h4 class="card-title">ID-Code erkannt</h4>
+        <div style="text-align: center;">
+          <i class="fa fa-check fa-5x r" aria-hidden="true"></i>
+        </div>
+        <hr>
+        <span class="text-muted"> Sie werden angemeldet...</span>
+      </div>
+    </div>
+
+    <div *ngIf="qrLogin == qrLoginEnum.QRFail" class="card" style="width: 400px;">
+      <div class="card-body">
+        <h4 class="card-title">ID-Code nicht erkannt</h4>
+        <div style="text-align: center;">
+          <i class="fa fa-times fa-5x r" aria-hidden="true"></i>
+        </div>
+        <hr>
+        <button type="submit" (click)="qrLogin = qrLoginEnum.QRAttempt" class="btn btn-primary btn-lg btn-block">Erneut versuchen</button>
+        <button type="submit" (click)="qrLogin = qrLoginEnum.PWLogin" class="btn btn-link btn-lg btn-block" style="cursor: pointer;">Manuelle Anmeldung</button>
+      </div>
+    </div>
+
+    <div *ngIf="qrLogin == qrLoginEnum.PWLogin" class="card" style="width: 400px; text-align: left">
+      <h4 class="card-header" ><a><i class="fa fa-arrow-left" aria-hidden="true" (click)="qrLogin = qrLoginEnum.QRAttempt" style="cursor: pointer;"></i></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Manuelle Anmeldung</h4>
+      <div class="card-body">
+          <div class="form-group">
+            <label for="loginID">Anmelde-ID</label>
+            <input type="text" class="form-control" id="loginID" aria-describedby="Login Text" placeholder="Anmelde-ID" [(ngModel)]="loginId" (keyup.enter)="checkQRCode(loginId, null)">
+            <small id="Login Text" class="form-text text-muted">Die ID steht auf Ihrem ID-Chip</small>
+          </div>
+          <hr>
+          <button type="submit" (click)="checkQRCode(loginId, null)" class="btn btn-primary">Anmelden</button>
+      </div>
+    </div>
+
+    <div *ngIf="qrLogin == qrLoginEnum.AdminLogin" class="card" style="width: 400px; text-align: left">
+      <h4 class="card-header" ><a><i class="fa fa-arrow-left" aria-hidden="true" (click)="qrLogin = qrLoginEnum.QRAttempt" style="cursor: pointer;"></i></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Administrator Anmeldung</h4>
+      <div class="card-body">
+        <div class="form-group">
+          <small id="Login Text" class="form-text text-muted">Melden Sie sich mit Ihrem Benutzername an.</small>
+          <label for="loginID">Anmelde-ID</label>
+          <input type="text" class="form-control" id="loginID" aria-describedby="Login Text" placeholder="mmustermann" [(ngModel)]="loginId" (keyup.enter)="checkQRCode(loginId, loginPw)">
+          <label style="margin-top: 20px" for="password">Passwort</label>
+          <input type="password" class="form-control" id="password" aria-describedby="Login Text" placeholder="Geheim" [(ngModel)]="loginPw" (keyup.enter)="checkQRCode(loginId, loginPw)">
+
+        </div>
+        <hr>
+        <button type="submit" (click)="checkQRCode(loginId, loginPw)" class="btn btn-primary">Anmelden</button>
+      </div>
+    </div>
+<!-- Comment test-->
+<!-- Comment test-->
+  </div>
+</div>

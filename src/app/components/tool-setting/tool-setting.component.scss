@@ -1,0 +1,198 @@
+/*!
+ * Copyright 2018 Thomas Winkler
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+tr {
+  height:32px;
+}
+
+th{
+  border-color: #e0e0e0;
+  overflow:hidden;
+  min-width: 50px;
+  background: #f0f0f0;
+  vertical-align: bottom;
+}
+td {
+  border-color: #e0e0e0;
+  min-width: 50px;
+  max-width: 50px;
+}
+
+.table-top-left {
+  display: block;
+  max-width: 100px;
+  margin-bottom: -189px;
+  tr {
+    height: 172px !important;
+    th:last-child{
+      min-width: 53px;
+    }
+  }
+}
+.table-right {
+  max-width: calc(100% - 110px);
+  overflow-x: scroll;
+  display: inline-block;
+  //margin-bottom: -20px;
+}
+
+.table-left {
+  display: inline-block;
+  max-width: 105px;
+  height: 150px;
+  //margin-bottom: -20px;
+  //margin-top: -10px
+}
+
+th span {
+  transform-origin: -7% 70%;;
+
+  transform: rotate(-90deg);
+  white-space: nowrap;
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+}
+th span:only-child {
+  transform-origin: 0 50%;
+}
+th span + span {
+  transform-origin: 4% 30%;
+}
+
+table, tr, td, th {
+  position: relative;
+  text-align: center;
+  font-size: 14px;
+}
+
+
+.chooseVariantAndMachineAlert {
+  position: absolute;
+  z-index: 999;
+  width: calc(100% - 152px);
+  height: 150px;
+  border-width: 10px;
+  padding-top: 40px;
+  &.first {
+    margin-left: 110px;
+    margin-top: 35px;
+  }
+  &.alert-warning {
+    background: rgba(255,243,205,0.9);
+  }
+}
+.disabled-tr {
+  .table-cell-ni {
+    background: #f2f2f2 !important;
+  }
+  .table-cell {
+    input{
+      background: #f2f2f2 !important;
+    }
+  }
+
+}
+.disabled-button {
+  color: lightgrey;
+}
+
+.table-table {
+  width: 1750px;
+
+  .table-row {
+    grid-gap: 1px;
+    background: #dee2e6;
+    height: 32px;
+    display: grid;
+    padding-bottom: 1px;
+    padding-left: 1px;
+    padding-right: 1px;
+    &:first-child {
+      padding-top: 1px;
+    }
+    grid-template-columns: 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px 49px;
+
+    .table-cell-ni {
+      background: white;
+      padding-left: 17px;
+      padding-top: 3px;
+    }
+    .table-cell {
+      //max-width: 50px;
+      //border: 1px solid lightgrey
+      &:last-child {
+        border-right: 1px solid #dee2e6;
+      }
+      > form {
+        display: inline-block;
+        height: 100%;
+      }
+      input {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        padding: 2px;
+        border: none;
+        border-radius: 0px;
+        //background: rgba(0,0,0,0);
+      }
+    }
+  }
+}
+
+.ontop-slider {
+  margin-bottom: -1px;
+  >th {
+    display: inline-block;
+    border: 1px solid #e0e0e0 !important;
+    max-width: 104px;
+  }
+  >div {
+    display: inline-block;
+    background: #f0f0f0;
+    width: 101px;
+    height: 44px;
+    border: 1px solid #e0e0e0;
+    border-bottom: none;
+    margin-bottom: -6px;
+    >label {
+      position: absolute;
+      display: inline-block;
+      border: 1px solid grey;
+      max-width: 104px;
+      margin-top: 5px;
+    }
+  }
+}
+.table-right-top {
+  th {
+    border: 1px solid #dee2e6;
+  }
+}
+.table-heading-1st {
+  background: #e2eaee;
+}
+.table-heading-2nd {
+  background: #f0f0f0;
+}
+
+.bit {
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0,138,202,1);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(0,138,202,1);
+  box-shadow: 0px 0px 5px 0px rgba(0,138,202,1);
+}

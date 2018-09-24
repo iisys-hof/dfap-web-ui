@@ -1,0 +1,61 @@
+{
+  "env": {
+    "name": "#{envName}"
+  },
+  "feedback": {
+    "allowedOutlines": ["Deckblatt", "Stammkarte HW", "Stammkarte PCE1", "Stammkarte PCE1", "Stammkarte PCE2", "Stammkarte PCE3", "Prüfanweisung1", "Prüfanweisung2", "Tankplattenaufbau", "Stützluft"]
+  },
+
+  "services": {
+    "authService": {
+      "protocol": "http",
+      "host": "your-host",
+      "port": 8080,
+      "path": "",
+      "requireHttps": false
+    },
+    "printerService": {
+      "protocol": "http",
+      "host": "localhost",
+      "port": 8080,
+      "path": "/dfap-printer/"
+    },
+    "printerServiceVogler": {
+      "protocol": "https",
+      "host": "your-host",
+      "port": 5000,
+      "path": ""
+    },
+    "utilityService": {
+      "protocol": "http",
+      "host": "localhost",
+      "port": 8080,
+      "path": "/dfap-feedback/"
+    },
+    "fileService": {
+      "protocol": "http",
+      "host": "localhost",
+      "port": 8080,
+      "path": "/dfap-document/"
+    },
+    "databaseService": {
+      "order": {
+        "protocol": "http",
+        "host": "localhost",
+        "port": 8080,
+        "path": "/dfap-order/"
+      },
+      "toolSetting": {
+        "protocol": "http",
+        "host": "localhost",
+        "port": 8080,
+        "path": "/dfap-toolsettings/"
+      },
+      "feedback": {
+        "protocol": "http",
+        "host": "localhost",
+        "port": 8080,
+        "path": "/dfap-feedback/"
+      }
+  }
+}

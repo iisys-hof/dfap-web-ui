@@ -1,0 +1,67 @@
+/*!
+ * Copyright 2018 Thomas Winkler
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.qsm {
+  margin-bottom: 0px;
+}
+.card {
+  height: 100%;
+  li {
+    cursor: pointer;
+  }
+}
+
+.card-body {
+  overflow-y: scroll
+}
+#file-viewer {
+  overflow-x: scroll;
+  margin-bottom: 20px;
+}
+
+#text {
+  font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+li.marked {
+  background: #eee !important;
+}
+
+.list-group-item {
+  padding: 0.75rem 0rem;
+  background: none;
+}
+
+#pdf-ref {
+  .list-group-item {
+    padding: 0.75rem 0.8rem;
+  }
+}
+
+.card-footer {
+  border-bottom: 1px solid rgba(0, 74, 144, 0.135);
+  padding: 0.05rem 1.25rem 0.05rem;
+}
+.card-body {
+  &.disabled {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+}
+.card-header {
+  &.disabled {
+    background-color: rgba(0, 0, 0, 0.09);
+  }
+}
